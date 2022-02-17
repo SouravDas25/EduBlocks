@@ -22,9 +22,6 @@ if [ $(basename $INSTALL_PATH) == 'edublocks' ]; then
   sudo rm -rf $INSTALL_PATH
 fi
 
-rm -f ~/connect/edublocks.desktop
-
-sudo rm -f $GLOBAL_BIN_PATH/edublocks
 sudo rm -f $GLOBAL_BIN_PATH/edublocks-connect
 sudo rm -f $GLOBAL_BIN_PATH/edublocks-startup-enable
 sudo rm -f $GLOBAL_BIN_PATH/edublocks-startup-disable
@@ -33,6 +30,5 @@ sudo rm -f $GLOBAL_BIN_PATH/edublocks-connect-uninstall
 sudo rm -f /usr/share/icons/hicolor/scalable/apps/connectlogo.png
 sudo rm -f /usr/share/icons/hicolor/scalable/apps/logo.png
 sudo rm -f /usr/share/applications/edublocks-connect.desktop
-sudo rm -f /usr/share/applications/edublocks.desktop
 
 echo '==== EduBlocks has been uninstalled successfully ===='

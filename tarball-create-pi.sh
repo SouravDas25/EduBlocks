@@ -73,7 +73,6 @@ cp $REPO_PATH/install-deps-connect.sh     $BUNDLE_PATH
 cp $REPO_PATH/install-connect.sh          $BUNDLE_PATH
 
 cp $REPO_PATH/edublocks-connect.desktop   $APP_PATH
-cp $REPO_PATH/edublocks.desktop   $APP_PATH
 
 cp -r $REPO_PATH/script-includes  $APP_PATH
 cp -r $REPO_PATH/scripts          $APP_PATH
