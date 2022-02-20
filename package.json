@@ -15,5 +15,8 @@
     "bugs": {
         "url": "https://github.com/AllAboutCode/EduBlocks/issues"
     },
-    "homepage": "https://github.com/AllAboutCode/EduBlocks#readme"
+    "homepage": "https://github.com/AllAboutCode/EduBlocks#readme",
+    "dependencies": {
+        "yarn": "^1.22.17"
+    }
 }
