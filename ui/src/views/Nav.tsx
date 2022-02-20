@@ -1,11 +1,11 @@
 import React = require('preact');
 import {Component} from 'preact';
 import Auth from './Auth';
-import {navLabels} from './Page';
-import { GlobalVars } from './Page';
+import {GlobalVars, navLabels} from './Page';
 
 interface Props {
     platformImg?: string;
+    sync: boolean;
 
     openSamples(): void;
 
@@ -37,8 +37,6 @@ interface Props {
     openAuth(): void;
 
     closeAuth(): void;
-
-    sync: boolean;
 }
 
 export default class Nav extends Component<Props, {}> {
@@ -60,7 +58,7 @@ export default class Nav extends Component<Props, {}> {
 
 
                 <div class='menu' id="menubar">
-                    
+
 
                     <a class='button icon-plus' id="new" title='Create new file' href='javascript:void(0)'
                        onClick={() => this.props.newCode()}>
@@ -82,7 +80,6 @@ export default class Nav extends Component<Props, {}> {
             Themes
           </a>*/}
 
-                   
 
                     <a class='button icon-book' title='Samples' href='javascript:void(0)'
                        onClick={() => this.props.openSamples()}>
@@ -102,20 +99,21 @@ export default class Nav extends Component<Props, {}> {
                     }
 
                     {downloadHex &&
-                    <a class='button icon-flash button-green' title='Download file to flash to micro:bit' href='javascript:void(0)'
+                    <a class='button icon-flash button-green' title='Download file to flash to micro:bit'
+                       href='javascript:void(0)'
                        onClick={() => downloadHex()}>
                         {navLabels[8]}
                     </a>
                     }
 
                     {downloadPython &&
-                    <a class='button icon-download button-green' title='Download Python Source Code' href='javascript:void(0)'
+                    <a class='button icon-download button-green' title='Download Python Source Code'
+                       href='javascript:void(0)'
                        onClick={() => downloadPython()}>
                         {navLabels[9]}
                     </a>
                     }
 
-                    
 
                 </div>
             </nav>

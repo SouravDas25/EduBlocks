@@ -2,13 +2,12 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import * as firebaseui from 'firebaseui';
 import * as React from 'preact';
-import {navLabels} from './Page';
-
-import { GlobalVars } from './Page';
+import {GlobalVars, navLabels} from './Page';
 
 
 interface AuthProps {
     openAuth(): void;
+
     closeAuth(): void;
 }
 
@@ -39,7 +38,7 @@ export default class Auth extends React.Component<AuthProps, State> {
             },
             // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
             signInFlow: 'popup',
-            
+
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -50,15 +49,15 @@ export default class Auth extends React.Component<AuthProps, State> {
                     buttonColor: '#2F2F2F',
                     iconUrl: 'https://clipartart.com/images/microsoft-logo-clipart-transparent-3.png',
                     loginHintKey: 'login_hint',
-                  },
-                  {
+                },
+                {
                     hd: 'acme.com',
                     provider: 'apple.com',
                     providerName: 'Apple',
                     buttonColor: '#000000',
                     iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png',
                     loginHintKey: 'login_hint',
-                  },
+                },
                 {
                     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
                     requireDisplayName: true
@@ -72,19 +71,6 @@ export default class Auth extends React.Component<AuthProps, State> {
         };
 
         this.openAuth = this.openAuth.bind(this);
-    }
-
-    private openAuth() {
-        this.ui.start('#firebaseui-auth-container', this.uiConfig);
-        this.props.openAuth();
-    }
-
-    private logOutAccount() {
-        firebase.auth().signOut().then(function () {
-            GlobalVars.openFiles = "Open";
-        }, function (error) {
-            // An error happened.
-        });
     }
 
     componentDidMount(): void {
@@ -109,19 +95,34 @@ export default class Auth extends React.Component<AuthProps, State> {
 
     }
 
-    
     public render() {
         if (this.state.user) {
             GlobalVars.openFiles = "Files"
             return <div className='login'>
-                {this.state.user.photoURL ? <img id="loginimage" src={this.state.user.photoURL} alt='' /> : <img id="loginimage" src="images/default-profile-image.png" alt='' />}
-                <button style='background: rgba(0, 0, 0, 0); padding: 0.1em !important;' onClick={this.logOutAccount} data-tooltip='Log Out'><span id="name">{this.state.user.displayName}</span></button>
+                {this.state.user.photoURL ? <img id="loginimage" src={this.state.user.photoURL} alt=''/> :
+                    <img id="loginimage" src="images/default-profile-image.png" alt=''/>}
+                <button style='background: rgba(0, 0, 0, 0); padding: 0.1em !important;' onClick={this.logOutAccount}
+                        data-tooltip='Log Out'><span id="name">{this.state.user.displayName}</span></button>
             </div>;
         }
 
         return <div className='login'>
-            <button style='background: rgba(0, 0, 0, 0)' onClick={this.openAuth}><i class='fas fa-sign-in-alt'></i>  {navLabels[6]}</button>
+            <button style='background: rgba(0, 0, 0, 0)' onClick={this.openAuth}><i
+                class='fas fa-sign-in-alt'></i> {navLabels[6]}</button>
         </div>;
+    }
+
+    private openAuth() {
+        this.ui.start('#firebaseui-auth-container', this.uiConfig);
+        this.props.openAuth();
+    }
+
+    private logOutAccount() {
+        firebase.auth().signOut().then(function () {
+            GlobalVars.openFiles = "Open";
+        }, function (error) {
+            // An error happened.
+        });
     }
 }
 
@@ -136,17 +137,17 @@ export class AuthModal extends React.Component<AuthModalProps, {}> {
 
         return (
             <div class='modal'>
-                <input id='modal_1' type='checkbox' disabled={true} checked={this.props.visible} />
-                <label for='modal_1' class='overlay' />
+                <input id='modal_1' type='checkbox' disabled={true} checked={this.props.visible}/>
+                <label for='modal_1' class='overlay'/>
                 <article class='LoginModal__container'>
                     <header class='LoginModal__header'>
                         <h3>{navLabels[6]}</h3>
                         <a class='LoginModal__close close'
-                            onClick={this.props.onClose}>&times;</a>
+                           onClick={this.props.onClose}>&times;</a>
                     </header>
 
                     <section class='SelectModel__content'>
-                        <div id='firebaseui-auth-container' />
+                        <div id='firebaseui-auth-container'/>
                     </section>
                 </article>
             </div>

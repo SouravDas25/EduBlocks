@@ -1,9 +1,9 @@
 import React = require('preact');
-import { Component } from 'preact';
-import { getPlatform, getPlatformList } from '../platforms';
-import { App, Capability, Extension, Platform, PlatformInterface } from '../types';
+import {Component} from 'preact';
+import {getPlatform, getPlatformList} from '../platforms';
+import {App, Capability, Extension, Platform, PlatformInterface} from '../types';
 import firebase from 'firebase';
-import { AuthModal } from './Auth';
+import {AuthModal} from './Auth';
 import AlertModal from './AlertModal';
 import IEModal from './IEModal';
 import LoadModal from './LoadModal';
@@ -11,23 +11,28 @@ import UploadModal from './UploadModal';
 import ExtensionModal from './ExtensionModal';
 import BlocklyView from './BlocklyView';
 import ImageModal from './ImageModal';
-const copy = require('copy-text-to-clipboard');
 import Nav from './Nav';
-
-const Cookies = require("js-cookie")
-
 import OverModal from './OverwriteModal';
 import PythonView from './PythonView';
 import RemoteShellView from './RemoteShellView';
-import SelectModal, { SelectModalOption } from './SelectModal';
+import SelectModal, {SelectModalOption} from './SelectModal';
 import FirebaseSelectModal from './FirebaseSelectModal';
 
 import TrinketView from './TrinketView';
 
+const copy = require('copy-text-to-clipboard');
+
+const Cookies = require("js-cookie")
+
 type AdvancedFunction = 'Export Python' | 'Themes' | 'Flash Hex' | 'Extensions' | 'Switch Language' | 'Split View';
 let AdvancedFunctions: AdvancedFunction[] = ['Export Python', 'Themes', "Switch Language", "Split View"];
 
-type ShareOptions = 'Copy Shareable URL' | 'Copy Embed Code' | 'Share to Google Classroom' | 'Share to Microsoft Teams' | 'Share to Public Gallery (BETA)';
+type ShareOptions =
+    'Copy Shareable URL'
+    | 'Copy Embed Code'
+    | 'Share to Google Classroom'
+    | 'Share to Microsoft Teams'
+    | 'Share to Public Gallery (BETA)';
 let ShareOptions: ShareOptions[] = ['Copy Shareable URL', 'Copy Embed Code', 'Share to Google Classroom', 'Share to Microsoft Teams', 'Share to Public Gallery (BETA)'];
 
 type Languages = 'English' | 'French' | 'German' | 'Welsh';
@@ -59,7 +64,7 @@ interface State {
     platform?: PlatformInterface;
     viewMode: ViewMode;
     includeTurtle: boolean;
-    modal: null | 'platform' | 'turtle' | 'IE' | 'generating' | 'extensionsnew' |  'share' | 'shareoptions' | 'terminal' | 'languages' | 'samples' | 'themes' | 'extensions' | 'functions' | 'pythonOverwritten' | 'https' | 'noCode' | 'codeOverwrite' | 'progress' | 'auth' | 'error' | 'files';
+    modal: null | 'platform' | 'turtle' | 'IE' | 'generating' | 'extensionsnew' | 'share' | 'shareoptions' | 'terminal' | 'languages' | 'samples' | 'themes' | 'extensions' | 'functions' | 'pythonOverwritten' | 'https' | 'noCode' | 'codeOverwrite' | 'progress' | 'auth' | 'error' | 'files';
     prevModal: null | 'platform' | 'turtle' | 'IE' | 'generating' | 'share' | 'extensionsnew' | 'shareoptions' | 'terminal' | 'languages' | 'samples' | 'themes' | 'extensions' | 'functions' | 'pythonOverwritten' | 'https' | 'noCode' | 'codeOverwrite' | 'progress' | 'auth' | 'error' | 'files';
     extensionsActive: Extension[];
     progress: number;
@@ -75,34 +80,34 @@ interface State {
 
 export class GlobalVars {
     public static openFiles: any = "Open";
-  }
+}
 
 export let split = false;
 
 export let classroom = "";
 
 
-export let navLabels: string[] = new Array();
+export let navLabels: string[] = [];
 navLabels = ["New", "Open", "Save", "Samples", "Extras", "Run", "Login", "Untitled", "Download Hex", "Download", "Themes", "Share"];
 
-export let generic: string[] = new Array();
-generic = ["Open", 
-            "Go", 
-            "Select", 
-            "Close", 
-            "Delete", 
-            "Yes", 
-            "No", 
-            "Attention!",  
-            "There is no code to run!", 
-            "Changing mode will make you lose your code, do you wish to continue?", 
-            "Uploading...", 
-            "Select your mode",
-            "Files"];
+export let generic: string[] = [];
+generic = ["Open",
+    "Go",
+    "Select",
+    "Close",
+    "Delete",
+    "Yes",
+    "No",
+    "Attention!",
+    "There is no code to run!",
+    "Changing mode will make you lose your code, do you wish to continue?",
+    "Uploading...",
+    "Select your mode",
+    "Files"];
 
 export default class Page extends Component<Props, State> {
-    
-    
+
+
     public remoteShellView?: RemoteShellView;
 
     constructor() {
@@ -127,96 +132,11 @@ export default class Page extends Component<Props, State> {
         };
     }
 
-    private isIE() {
-        let ua = navigator.userAgent;
-
-        var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
-        
-        return is_ie; 
-      }
-
-    private async readBlocklyContents(xml: string) {
-        if (this.state.doc.xml === xml) {
-            return;
-        }
-
-        const doc: DocumentState = {
-            xml,
-            python: null,
-            pythonClean: true,
-        };
-
-        this.setState({ doc });
-
-        if (split === true){
-            this.switchView(ViewModeBlockly);
-
-            await this.splitView(false);
-
-            split = true
-            this.splitView(true);
-        }
-        else{
-            this.switchView(ViewModeBlockly);
-        }
-    }
-
-    
-
-    private updateFromBlockly(xml: string, python: string) {
-        if (
-            this.state.doc.xml === xml &&
-            this.state.doc.python === python
-        ) {
-            return;
-        }
-
-        if (this.state.doc.python !== python && !this.state.doc.pythonClean) {
-            this.setState({ modal: 'pythonOverwritten' });
-        }
-
-        const doc: DocumentState = {
-            xml,
-            python,
-            pythonClean: true,
-        };
-
-        this.setState({ doc });
-    }
-
-    private updateFromPython(python: string) {
-        if (this.state.doc.python === python) {
-            return;
-        }
-
-        const doc: DocumentState = {
-            xml: this.state.doc.xml,
-            python,
-            pythonClean: false,
-        };
-
-        this.setState({ doc });
-    }
-
-    private async new() {
-        const doc: DocumentState = {
-            xml: null,
-            python: null,
-            pythonClean: true,
-        };
-        this.setState({ doc });
-
-        (document.getElementById("filename") as HTMLInputElement).value = "";
-
-        this.setState({fileName: "Untitled"});
-
-    }
-
     public componentDidMount() {
         let currentTheme = Cookies.get("theme")
 
-        if (this.isIE()){
-            this.setState({ modal: "IE" })
+        if (this.isIE()) {
+            this.setState({modal: "IE"})
         }
 
         document.body.className = `theme-${currentTheme}`;
@@ -228,20 +148,20 @@ export default class Page extends Component<Props, State> {
             this.selectPlatform(platformKey);
         }
 
-        if( locURL.indexOf('#share') >= 0){
-            if( locURL.indexOf('?Python') >= 0){
+        if (locURL.indexOf('#share') >= 0) {
+            if (locURL.indexOf('?Python') >= 0) {
                 this.selectPlatform("Python");
             }
-            
-            if( locURL.indexOf('?MicroBit') >= 0){
+
+            if (locURL.indexOf('?MicroBit') >= 0) {
                 this.selectPlatform("MicroBit");
             }
 
-            if( locURL.indexOf('?CircuitPython') >= 0){
+            if (locURL.indexOf('?CircuitPython') >= 0) {
                 this.selectPlatform("CircuitPython");
             }
 
-            if( locURL.indexOf('?RaspberryPi') >= 0){
+            if (locURL.indexOf('?RaspberryPi') >= 0) {
                 this.selectPlatform("RaspberryPi");
             }
 
@@ -256,817 +176,14 @@ export default class Page extends Component<Props, State> {
             };
             xhr.open('GET', decoded);
             xhr.send();
-            this.setState({ modal: null });
+            this.setState({modal: null});
 
             this.delay(400);
             history.pushState(null, "", location.href.split("#")[0]);
 
-    }
-    
-    }
-
-    private toggleView(): 0 {
-        switch (this.state.viewMode) {
-            case ViewModeBlockly:
-                return this.switchView(ViewModePython);
-
-            case ViewModePython:
-                return this.switchView(ViewModeBlockly);
         }
-    }
-
-    private switchView(viewMode: ViewMode): 0 {
-        switch (viewMode) {
-            case ViewModeBlockly:
-                let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
-                let pythonEditor = document.getElementById('editor') as HTMLBodyElement;
-                pythonEditor.style.display = "none";
-                blocklyEditor.style.display = "block";
-                this.setState({ viewMode: 'blocks' });
-
-                return 0;
-
-            case ViewModePython:
-                let blockEditor = document.getElementById('blockly') as HTMLBodyElement;
-                let pyEditor = document.getElementById('editor') as HTMLBodyElement;
-                blockEditor.style.display = "none";
-                pyEditor.style.display = "block";
-                this.setState({ viewMode: 'python' });
-
-                return 0;
-
-            case ViewModeSplit:
-                    let blocksEditor = document.getElementById('blockly') as HTMLBodyElement;
-                    this.setState({ viewMode: 'blocks' });
-                    this.setState({ viewMode: 'python' });
-                    blocksEditor.style.display = "block";
-                    return 0;
-        }
-    }
-
-    private openTerminal() {
-        if (!this.state.doc.python) {
-            this.setState({ modal: 'noCode' });
-
-            return;
-        }
-
-        this.setState({ modal: 'terminal' });
-
-        if (this.state.doc.python.indexOf("turtle") !== -1 || this.state.doc.python.indexOf("processing") !== -1 || this.state.doc.python.indexOf("pygal") !== -1) {
-            this.setState({includeTurtle: true})
-        } 
-        else{
-            this.setState({includeTurtle: false})
-        }
-
-        if (this.remoteShellView) {
-            this.remoteShellView.focus();
-            this.remoteShellView.reset();
-
-            this.props.app.runCode(this.state.doc.python);
-
-            setTimeout(() => this.remoteShellView!.focus(), 250);
-        }
-    }
-
-    private onBlocklyChange(xml: string, python: string) {
-        this.updateFromBlockly(xml, python);
-    }
-
-    private onPythonChange(python: string) {
-        this.updateFromPython(python);
-    }
-
-
-    private async openFile() {
-        const user = firebase.auth().currentUser;
-        if (user) {
-            let self = this;
-            const ref = firebase.storage().ref(`blocks/${user.uid}`);
-            ref.listAll().then(function (res) {
-                self.setState({
-                    files: res.items.map((i) => ({
-                        label: i.name,
-                        ref: i,
-                    })),
-                    modal: 'files',
-                });
-            }).catch(function (error) {
-                self.setState({
-                    modal: 'error',
-                });
-                console.error(error);
-            });
-
-        } else {
-            const xml = await this.props.app.openFile();
-            this.readBlocklyContents(xml);
-        }
-    }
-
-    private async openFirebaseFile(file: firebase.storage.Reference) {
-        this.closeModal();
-        let self = this;
-        let newFileName = "";
-        await console.log("Opening file...")
-        if (file.name.indexOf("(Python)") !== -1 && this.state.platform!.key !== "Python"){
-            this.selectPlatform("Python");
-            newFileName = file.name.replace(" (Python)", "");
-            
-        }
-        if (file.name.indexOf("(RPi)") !== -1 && this.state.platform!.key !== "RaspberryPi"){
-            this.selectPlatform("RaspberryPi");
-            newFileName = file.name.replace(" (RPi)", "");
-            
-        }
-        if (file.name.indexOf("(microbit)") !== -1 && this.state.platform!.key !== "MicroBit"){
-            this.selectPlatform("MicroBit");
-            newFileName = file.name.replace(" (microbit)", "");
-            
-        }
-        if (file.name.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key !== "CircuitPython"){
-            this.selectPlatform("CircuitPython");
-            newFileName = file.name.replace(" (CircuitPython)", "");
-            
-        }
-
-        if (file.name.indexOf("(Python)") !== -1 && this.state.platform!.key === "Python"){
-            newFileName = file.name.replace(" (Python)", "");
-            
-        }
-        if (file.name.indexOf("(RPi)") !== -1 && this.state.platform!.key === "RaspberryPi"){
-            newFileName = file.name.replace(" (RPi)", "");
-            
-        }
-        if (file.name.indexOf("(microbit)") !== -1 && this.state.platform!.key === "MicroBit"){
-            newFileName = file.name.replace(" (microbit)", "");
-            
-        }
-        if (file.name.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key === "CircuitPython"){
-            newFileName = file.name.replace(" (CircuitPython)", "");
-        }
-
-        (document.getElementById("filename") as HTMLInputElement).value = newFileName;
-
-        this.setState({fileName: newFileName});
-        file.getDownloadURL().then(function (url) {
-            const xhr = new XMLHttpRequest();
-            xhr.responseType = 'text';
-            xhr.onload = function (event) {
-                self.readBlocklyContents(xhr.responseText);
-            };
-            xhr.open('GET', url);
-            xhr.send();
-        }).catch(function (error) {
-            self.setState({
-                modal: 'error',
-            });
-            console.error(error);
-        });
 
     }
-
-    private async deleteFirebaseFile(file: firebase.storage.Reference) {
-        file.delete();
-        this.closeModal();
-    } 
-
-    private delay(ms: number) {
-        return new Promise( resolve => setTimeout(resolve, ms) );
-    }
-
-    
-    
-
-    private async shareFirebaseFile(file: firebase.storage.Reference) {
-        let filePlatform = ""
-        if (file.name.indexOf("(Python)") !== -1){
-            filePlatform = "Python"
-        }
-        if (file.name.indexOf("(RPi)") !== -1){
-            filePlatform = "RaspberryPi"
-        }
-        if (file.name.indexOf("(microbit)") !== -1){
-            filePlatform = "MicroBit"
-        }
-        if (file.name.indexOf("(CircuitPython)") !== -1){
-            filePlatform = "CircuitPython"
-        }
-        let fileURL = await file.getDownloadURL();
-        let newFileURL = fileURL.substring(0, fileURL.indexOf('&token='));
-        const encoded = btoa(newFileURL);
-        const edublocksLink = "https://app.edublocks.org/#share?" + filePlatform + "?" + encoded;
-        await this.setState({ shareURL: edublocksLink});
-        await this.setState({ shareFileName: file.name});
-        await console.log(this.state.shareURL);
-        await this.setState({ modal: "shareoptions", prevModal: null});
-    }
-
-    private async runShareOptions(func: ShareOptions) {
-        if (func === 'Share to Google Classroom'){
-            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
-            this.setState({ modal: "generating"});
-            
-            const response = await fetch(
-                shareableURL
-            );
-        
-            const body = await response.json();
-
-            console.log(this.state.shareURL)
-            await this.closeModal()
-            if (response.ok){
-                const shortLink = "https://share.edublocks.org/" + body.result.code
-                await console.log(this.state.shareURL)
-                await this.setState({ shareURL: shortLink});
-                window.open("https://classroom.google.com/u/0/share?url=" + encodeURIComponent(this.state.shareURL) + "&usegapi=1&id=I0_1591303124637&parent=https%3A%2F%2Fwww.gstatic.com&pfname=%2FI0_1591303123749&rpctoken=58755424&jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.utl9jrRztb8.O%2Fam%3DwQE%2Fd%3D1%2Fct%3Dzgms%2Frs%3DAGLTcCOUgIiKp6EMsn7UOgLQFm23i5pjzQ%2Fm%3D__features__",'1591307119253','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=600,top=300')
-                this.closeModal()
-            }
-
-            else{console.log(console.error());}
-        }
-        if (func === 'Share to Microsoft Teams'){
-            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
-            this.setState({ modal: "generating"});
-            
-            const response = await fetch(
-                shareableURL
-            );
-        
-            const body = await response.json();
-
-            console.log(this.state.shareURL)
-            await this.closeModal()
-            if (response.ok){
-                const shortLink = "https://share.edublocks.org/" + body.result.code
-                await console.log(this.state.shareURL)
-                await this.setState({ shareURL: shortLink});
-                window.open("https://teams.microsoft.com/share?href=" + encodeURIComponent(this.state.shareURL),'1591307119253','width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=600,top=300')
-                this.closeModal()
-            }
-
-            else{console.log(console.error());}
-        }
-        if (func === 'Copy Shareable URL') {
-            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
-            this.setState({ modal: "generating"});
-            
-            const response = await fetch(
-                shareableURL
-            );
-        
-            const body = await response.json();
-
-            console.log(this.state.shareURL)
-            await this.closeModal()
-            if (response.ok){
-                const shortLink = "https://share.edublocks.org/" + body.result.code
-                await console.log(this.state.shareURL)
-                await this.setState({ shareURL: shortLink});
-                await copy(this.state.shareURL)
-                await this.closeModal()
-                await this.setState({ modal: "share"});
-            }
-
-            else{console.log(console.error());}
-        }
-
-        if (func === 'Copy Embed Code') {
-            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
-            this.setState({ modal: "generating"});
-
-            const response = await fetch(
-                shareableURL
-            );
-        
-            const body = await response.json();
-
-            console.log(shareableURL)
-            
-            if (response.ok){
-                const embedLink = '<iframe src="https://share.edublocks.org/' + body.result.code + '" height="600px" width="900px"></iframe>'
-                await console.log(embedLink)
-                await this.setState({ shareURL: embedLink});
-                await copy(this.state.shareURL)
-                await this.setState({ modal: "share"});
-            }
-
-            else{console.log(console.error());}
-        }  
-        if (func === 'Share to Public Gallery (BETA)') {
-            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
-            this.setState({ modal: "generating"});
-
-            let newFileName = "";
-            let platform = "";
-
-            if (this.state.shareFileName.indexOf("(Python)") !== -1 && this.state.platform!.key === "Python"){
-                newFileName = this.state.shareFileName.replace(" (Python)", "");
-                platform = "Python"
-                
-            }
-            if (this.state.shareFileName.indexOf("(RPi)") !== -1 && this.state.platform!.key === "RaspberryPi"){
-                newFileName = this.state.shareFileName.replace(" (RPi)", "");
-                platform = "RPi"
-                
-            }
-            if (this.state.shareFileName.indexOf("(microbit)") !== -1 && this.state.platform!.key === "MicroBit"){
-                newFileName = this.state.shareFileName.replace(" (microbit)", "");
-                platform = "microbit"
-                
-            }
-            if (this.state.shareFileName.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key === "CircuitPython"){
-                newFileName = this.state.shareFileName.replace(" (CircuitPython)", "");
-                platform = "CircuitPython"
-            }
-
-            const response = await fetch(
-                shareableURL
-            );
-        
-            const body = await response.json();
-            
-            if (response.ok){
-                var db = firebase.firestore();
-            
-                db.collection("shared").add({ 
-                    name: newFileName,
-                    url: "https://share.edublocks.org/" + body.result.code,
-                    platform: platform
-                })
-
-                this.closeModal()
-                alert("Project live on https://projects.edublocks.org")
-            }
-
-            else{console.log(console.error());}
-        }
-    }
-
-    private async saveFile() {
-        const xml = this.state.doc.xml;
-
-        if (this.state.extensionsActive.length > 1){
-            await this.setState({ modal: "error", "prevModal": null});
-        }
-
-        else {
-            if (xml) {
-                const user = firebase.auth().currentUser;
-    
-                if (user) {
-                    let self = this;
-                    this.setState({
-                        modal: 'progress',
-                    });
-                    let plat = "";
-    
-                    if (this.state.platform!.key === "Python"){
-                        plat = " (Python)"
-                    }
-                    if (this.state.platform!.key === "MicroBit"){
-                        plat = " (microbit)"
-                    }
-                    if (this.state.platform!.key === "RaspberryPi"){
-                        plat = " (RPi)"
-                    }
-                    if (this.state.platform!.key === "CircuitPython"){
-                        plat = " (CircuitPython)"
-                    }
-    
-                    const ref = firebase.storage().ref(`blocks/${user.uid}/${this.state.fileName}${plat}`);
-                    const task = ref.putString(xml, undefined, {
-                        contentType: 'text/xml',
-                    });
-                    task.on('state_changed', function (snapshot) {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes);
-                        self.setState({
-                            progress: progress,
-                        });
-                    }, function (error) {
-                        self.setState({
-                            modal: 'error',
-                        });
-                        console.error(error);
-                    }, function () {
-                        self.closeModal();
-                    });
-                } else {
-                    await this.props.app.saveFile(this.state.fileName, xml, 'xml', 'text/xml;charset=utf-8');
-                }
-            }
-        }
-    }
-
-    private async downloadPython() {
-        const python = this.state.doc.python;
-
-        if (python) {
-            await this.props.app.exportPython(this.state.fileName, python, this.state.extensionsActive);
-        }
-    }
-
-    private async downloadHex() {
-        const python = this.state.doc.python;
-
-        if (python) {
-            this.props.app.saveHex(this.state.fileName, python, this.state.extensionsActive);
-        }
-    }
-
-    private async selectPlatform(platformKey: Platform) {
-        this.closeModal()
-        const platform = await getPlatform(platformKey);
-
-        if (platformKey === "CircuitPython"){
-            let filebox = document.getElementById("filename");
-            this.setState({"fileName": "code"});
-            filebox!.style.display = "none";
-        }
-        else{
-            let filebox = document.getElementById("filename");
-            filebox!.style.display = "block";
-        }
-
-        if (platformKey === 'RaspberryPi') {
-            let ip: string | null = null;
-
-           if (window.location.protocol === 'https:') {
-                alert('Need to switch to HTTP to access Raspberry Pi mode...');
-                window.location.protocol = 'http:';
-                return;
-            } 
-
-            if (navigator.platform.indexOf('arm') !== -1) {
-                await this.props.app.initConnection('localhost');
-            } else {
-                ip = prompt('Please enter your Raspberry Pi\'s IP address');
-
-                if (!ip) return;
-
-                try {
-                    await this.props.app.initConnection(ip);
-                } catch (err) {
-                    console.error(err);
-                }
-            }
-        }
-
-        this.setState({
-            platform,
-            modal: null,
-            extensionsActive: platform.defaultExtensions,
-        });
-
-        if (split === true){
-            this.switchView(ViewModeBlockly);
-
-            await this.splitView(false);
-
-            split = true
-            this.splitView(true);
-        }
-        else{
-            this.switchView(ViewModeBlockly);
-        }
-    }
-
-
-    private closeModal() {
-        this.setState({ modal: this.state.prevModal, prevModal: null });
-        
-    }
-
-
-    private openAuth() {
-        this.setState({ modal: 'auth', prevModal: this.state.modal });
-    }
-
-
-    private openSamples() {
-        this.setState({ modal: 'samples' });
-    }
-
-    private async selectSample(file: string) {
-        this.new()
-        await this.setState({ modal: null });
-
-        const xml = this.props.app.getSample(this.state.platform!.key, file);
-
-        await this.readBlocklyContents(xml);
-
-        
-    }
-
-
-    private openThemes() {
-        this.setState({ modal: 'themes' });
-    }
-
-    private selectTheme(theme: string) {
-        this.closeModal();
-
-        Cookies.set("theme", theme, { expires: 100000 })
-
-        document.body.className = `theme-${theme}`;
-    }
-
-
-    private openExtensions() {
-        this.setState({ modal: 'extensionsnew' });
-    }
-
-    private selectExtension(extension: Extension) {
-        this.closeModal();
-
-        const { extensionsActive } = this.state;
-
-        this.setState({
-            extensionsActive: [...extensionsActive, extension],
-        });
-    }
-
-
-    private onTerminalClose() {
-        this.closeModal();
-    }
-
-
-
-
-    private hasCapability(capability: Capability) {
-        if (!this.state.platform) return false;
-
-        return this.state.platform.capabilities.indexOf(capability) !== -1;
-
-    }
-
-    private getExtensions() {
-        if (!this.state.platform) return [];
-
-        return this.state.platform.extensions;
-    }
-
-
-    private initTerminal(terminalView: RemoteShellView) {
-        if (this.remoteShellView !== terminalView) {
-            this.remoteShellView = terminalView;
-
-            this.props.app.assignTerminal(terminalView);
-        }
-    }
-
-
-    private getPythonCode() {
-        return this.state.doc.python || '';
-    }
-
-
-    private openAdvancedFunctionDialog() {
-        this.setState({ modal: 'functions' });
-    }
-
-    
-
-    private fileChange(fileName: string) {
-        this.setState({ fileName });
-    }
-    
-
-    private openPlatforms() {
-        this.new();
-        this.setState({ modal: 'platform' });
-    }
-
-    private modeQuestion() {
-        this.setState({ modal: 'codeOverwrite' });
-    }
-
-    private getAdvancedFunctionList(): SelectModalOption[] {
-        let advancedFunctions = AdvancedFunctions;
-
-        if (this.state.platform && this.state.platform.capabilities.indexOf('HexFlash') !== -1) {
-            advancedFunctions = [...advancedFunctions, 'Flash Hex'];
-            advancedFunctions = [...advancedFunctions, 'Extensions'];
-        }
-
-        return advancedFunctions.map((func) => ({
-            label: func,
-            obj: func,
-        }));
-    }
-
-    private getShareOptionsList(): SelectModalOption[] {
-        let shareOptions = ShareOptions;
-
-        return shareOptions.map((func) => ({
-            label: func,
-            obj: func,
-        }));
-    }
-
-    private getLanguagesList(): SelectModalOption[] {
-        let languages = Languages;
-
-        return languages.map((func) => ({
-            label: func,
-            obj: func,
-        }));
-    }
-
-    private async runLanguages(func: Languages) {
-        if (func === 'English') {
-            GlobalVars.openFiles = "Open";
-
-            navLabels = ["New", "Open", "Save", "Samples", "Extras", "Run", "Login", "Untitled", "Download Hex", "Download", "Themes", "Share"];
-            
-            generic = ["Open", 
-            "Go", 
-            "Select", 
-            "Close", 
-            "Delete", 
-            "Yes", 
-            "No", 
-            "Attention!", 
-            "There is no code to run!", 
-            "Changing mode will make you lose your code, do you wish to continue?", 
-            "Uploading...", 
-            "Select your mode",
-            "Files"];
-
-            document.getElementById("menubar")!.innerHTML = navLabels[0];
-            document.getElementById("menubar")!.innerHTML = generic[0];
-            await this.closeModal();
-        }
-
-        if (func === 'French') {
-            GlobalVars.openFiles = "Ouvrir";
-
-            navLabels = ["Nouveau", "Ouvrir", "Sauvegarder", "Exemples", "Préférences", "Exécuter", "S'identifier", "Sans Titre", "Télécharger Hex", "Télécharger", "Thèmes", "Partager"];
-            
-            generic = [ "Ouvert", 
-                        "Aller", 
-                        "Sélectionner", 
-                        "Fermer", 
-                        "Effacer", 
-                        "Oui", 
-                        "Non", 
-                        "Attention!", 
-                        "Il n’y a pas de code à exécuter!", 
-                        "Changer le mode te fera perdre ton code, souhaites-tu continuer?",
-                        "Téléchargement...", 
-                        "Sélectionnez votre mode",
-                        "Des dossiers"];
-
-            document.getElementById("menubar")!.innerHTML = generic[0];
-            document.getElementById("menubar")!.innerHTML = navLabels[0];
-            await this.closeModal();
-        }
-
-        if (func === 'German') {
-            GlobalVars.openFiles = "Öffnen";
-
-            navLabels = ["Neu", "Öffnen", "Speichern", "Proben", "Extras", "Ausführen", "Login", "Unbetitelt", "Herunterladen Hex", "Herunterladen", "Themen", "Teilen"];
-            
-            generic = [ "Öffnen", 
-                        "Los", 
-                        "Markieren", 
-                        "Schließen", 
-                        "Löschen", 
-                        "Ja", 
-                        "Nein", 
-                        "Achtung!", 
-                        "Es ist kein Code zum Ausführen!", 
-                        "Wenn sie den Modus ändern, wird ihr Code gelöscht. Möchten sie fortfahren?", 
-                        "Wird hochgeladen...", 
-                        "Wählen sie ihren Modus aus",
-                        "Dateien"];
-
-            document.getElementById("menubar")!.innerHTML = generic[0];
-            document.getElementById("menubar")!.innerHTML = navLabels[0];
-            await this.closeModal();
-        }
-
-        if (func === 'Welsh') {
-            GlobalVars.openFiles = "Agor";
-
-            navLabels = ["Newydd", "Agor", "Cadw", "Samplau", "Yn ychwanegol", "Rhedeg", "Mewngofnodi", "Heb enw", "Lawrlwython Hex", "Lawrlwython", "Themâu", "Rhannu"];
-            
-            generic = [ "Agor", 
-                        "Mynd", 
-                        "Dewis", 
-                        "Cau", 
-                        "Dileu", 
-                        "Ie", 
-                        "Na", 
-                        "Eich sylw!", 
-                        "Nid oes cod i'w redeg!", 
-                        "Fe fydd newid modd yn achosi colled cod, ydych chi esiau parhau?", 
-                        "Yn lanlwytho...", 
-                        "Dewiswch eith modd",
-                        "Ffeiliau"];
-
-            document.getElementById("menubar")!.innerHTML = generic[0];
-            document.getElementById("menubar")!.innerHTML = navLabels[0];
-            await this.closeModal();
-        }
-    }
-
-    private async splitView(toggle: boolean){
-        if (toggle === true){
-            split = true;
-            let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
-            let pythonEditor = document.getElementById('python') as HTMLBodyElement;
-            let editorElement = document.getElementById('editor') as HTMLBodyElement;
-            let toggleElement = document.getElementById('toggleViewButton') as HTMLBodyElement;
-            let exitElement = document.getElementById('ExitSplit') as HTMLBodyElement;
-
-            blocklyEditor.style.width = "60%";
-            editorElement.style.width = "40%";
-            toggleElement.style.display = "none";
-            exitElement.style.display = "block";
-
-            window.dispatchEvent(new Event('resize'))
-
-            pythonEditor.classList.add("show-editor");
-
-            this.switchView(ViewModeSplit)
-
-            blocklyEditor.style.display = "block";
-
-            this.closeModal()
-
-        }
-
-        if (toggle === false){
-            split = false;
-            let editorElement = document.getElementById('editor') as HTMLBodyElement;
-            let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
-            let exitElement = document.getElementById('ExitSplit') as HTMLBodyElement;
-            let toggleElement = document.getElementById('toggleViewButton') as HTMLBodyElement;
-            
-            toggleElement.style.display = "block";
-            exitElement.style.display = "none";
-
-            window.dispatchEvent(new Event('resize'))
-
-            blocklyEditor.style.width = "100%";
-            editorElement.style.width = "100%";
-
-            window.dispatchEvent(new Event('resize'))
-
-            this.switchView(ViewModeBlockly);
-
-        }
-    }
-    
-
-    private async runAdvancedFunction(func: AdvancedFunction) {
-        if (func === 'Export Python') {
-            await this.downloadPython();
-            await this.closeModal();
-            
-        }
-
-        if (func === 'Themes') {
-            await this.openThemes();
-            
-        }
-
-        if (func === 'Split View') {
-            this.splitView(true)    
-        }
-
-
-        if (func === 'Switch Language') {
-            this.setState({ modal: 'languages' });
-        }
-
-        if (func === 'Extensions') {
-            await this.openExtensions();
-        }
-
-        if (func === 'Flash Hex') {
-            const python = this.state.doc.python;
-
-            if (python) {
-                this.setState({ modal: 'progress', progress: 0 });
-
-                try {
-                    await this.props.app.flashHex(python, this.state.extensionsActive, (progress) => {
-                        this.setState({ progress });
-                    });
-                } finally {
-                    this.setState({ modal: null });
-                }
-            }
-        }
-
-
-    }
-
-    
 
     public render() {
         const availablePlatforms = getPlatformList();
@@ -1147,25 +264,25 @@ export default class Page extends Component<Props, State> {
                     onCancel={() => {
                     }}
                     onButtonClick={(key) => key === 'close' && this.closeModal()}
-                /> 
+                />
 
                 {this.getExtensions().length > 0 &&
-                    <ExtensionModal
-                        title='Extensions'
-                        options={this.getExtensions().map((label) => ({ label }))}
-                        selectLabel={generic[2]}
-                        buttons={[]}
-                        visible={this.state.modal === 'extensionsnew'}
-                        onSelect={(extension) => this.selectExtension(extension.label as Extension)}
-                        onButtonClick={(key) => key === 'close' && this.closeModal()}
-                    />
+                <ExtensionModal
+                    title='Extensions'
+                    options={this.getExtensions().map((label) => ({label}))}
+                    selectLabel={generic[2]}
+                    buttons={[]}
+                    visible={this.state.modal === 'extensionsnew'}
+                    onSelect={(extension) => this.selectExtension(extension.label as Extension)}
+                    onButtonClick={(key) => key === 'close' && this.closeModal()}
+                />
                 }
 
                 <AlertModal
                     title={navLabels[11]}
                     visible={this.state.modal === 'share'}
-                    text= {this.state.shareURL}
-                    text2= "Copied to clipboard"
+                    text={this.state.shareURL}
+                    text2="Copied to clipboard"
                     onCancel={() => {
                     }}
                     onButtonClick={(key) => key === 'close' && this.closeModal()}
@@ -1221,7 +338,7 @@ export default class Page extends Component<Props, State> {
                         Exit Split View
 
                     </button>
-                    
+
 
                     <BlocklyView
                         visible={this.state.viewMode === 'blocks'}
@@ -1238,20 +355,20 @@ export default class Page extends Component<Props, State> {
                 </section>
 
                 {this.hasCapability('RemoteShell') &&
-                    <RemoteShellView
-                        ref={(c) => this.initTerminal(c)}
-                        visible={this.state.modal === 'terminal'}
-                        onClose={() => this.onTerminalClose()}
-                    />
+                <RemoteShellView
+                    ref={(c) => this.initTerminal(c)}
+                    visible={this.state.modal === 'terminal'}
+                    onClose={() => this.onTerminalClose()}
+                />
                 }
 
                 {this.hasCapability('TrinketShell') &&
-                    <TrinketView
-                        pythonCode={this.getPythonCode()}
-                        visible={this.state.modal === 'terminal'}
-                        turtle={this.state.includeTurtle === true}
-                        onClose={() => this.onTerminalClose()}
-                    />
+                <TrinketView
+                    pythonCode={this.getPythonCode()}
+                    visible={this.state.modal === 'terminal'}
+                    turtle={this.state.includeTurtle === true}
+                    onClose={() => this.onTerminalClose()}
+                />
                 }
 
                 <FirebaseSelectModal
@@ -1268,7 +385,7 @@ export default class Page extends Component<Props, State> {
 
                 <SelectModal
                     title={navLabels[3]}
-                    options={this.state.platform ? this.props.app.getSamples(this.state.platform.key).map((label) => ({ label })) : []}
+                    options={this.state.platform ? this.props.app.getSamples(this.state.platform.key).map((label) => ({label})) : []}
                     selectLabel={generic[0]}
                     buttons={[]}
                     visible={this.state.modal === 'samples'}
@@ -1278,7 +395,7 @@ export default class Page extends Component<Props, State> {
 
                 <SelectModal
                     title={navLabels[10]}
-                    options={this.props.app.getThemes().map((label) => ({ label }))}
+                    options={this.props.app.getThemes().map((label) => ({label}))}
                     selectLabel={generic[2]}
                     buttons={[]}
                     visible={this.state.modal === 'themes'}
@@ -1318,18 +435,876 @@ export default class Page extends Component<Props, State> {
 
 
                 {this.getExtensions().length > 0 &&
-                    <SelectModal
-                        title='Extensions'
-                        options={this.getExtensions().map((label) => ({ label }))}
-                        selectLabel={generic[2]}
-                        buttons={[]}
-                        visible={this.state.modal === 'extensions'}
-                        onSelect={(extension) => this.selectExtension(extension.label as Extension)}
-                        onButtonClick={(key) => key === 'close' && this.closeModal()}
-                    />
+                <SelectModal
+                    title='Extensions'
+                    options={this.getExtensions().map((label) => ({label}))}
+                    selectLabel={generic[2]}
+                    buttons={[]}
+                    visible={this.state.modal === 'extensions'}
+                    onSelect={(extension) => this.selectExtension(extension.label as Extension)}
+                    onButtonClick={(key) => key === 'close' && this.closeModal()}
+                />
                 }
 
             </div>
         );
+    }
+
+    private isIE() {
+        let ua = navigator.userAgent;
+
+        var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+
+        return is_ie;
+    }
+
+    private async readBlocklyContents(xml: string) {
+        if (this.state.doc.xml === xml) {
+            return;
+        }
+
+        const doc: DocumentState = {
+            xml,
+            python: null,
+            pythonClean: true,
+        };
+
+        this.setState({doc});
+
+        if (split === true) {
+            this.switchView(ViewModeBlockly);
+
+            await this.splitView(false);
+
+            split = true
+            this.splitView(true);
+        } else {
+            this.switchView(ViewModeBlockly);
+        }
+    }
+
+    private updateFromBlockly(xml: string, python: string) {
+        if (
+            this.state.doc.xml === xml &&
+            this.state.doc.python === python
+        ) {
+            return;
+        }
+
+        if (this.state.doc.python !== python && !this.state.doc.pythonClean) {
+            this.setState({modal: 'pythonOverwritten'});
+        }
+
+        const doc: DocumentState = {
+            xml,
+            python,
+            pythonClean: true,
+        };
+
+        this.setState({doc});
+    }
+
+    private updateFromPython(python: string) {
+        if (this.state.doc.python === python) {
+            return;
+        }
+
+        const doc: DocumentState = {
+            xml: this.state.doc.xml,
+            python,
+            pythonClean: false,
+        };
+
+        this.setState({doc});
+    }
+
+    private async new() {
+        const doc: DocumentState = {
+            xml: null,
+            python: null,
+            pythonClean: true,
+        };
+        this.setState({doc});
+
+        (document.getElementById("filename") as HTMLInputElement).value = "";
+
+        this.setState({fileName: "Untitled"});
+
+    }
+
+    private toggleView(): 0 {
+        switch (this.state.viewMode) {
+            case ViewModeBlockly:
+                return this.switchView(ViewModePython);
+
+            case ViewModePython:
+                return this.switchView(ViewModeBlockly);
+        }
+    }
+
+    private switchView(viewMode: ViewMode): 0 {
+        switch (viewMode) {
+            case ViewModeBlockly:
+                let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
+                let pythonEditor = document.getElementById('editor') as HTMLBodyElement;
+                pythonEditor.style.display = "none";
+                blocklyEditor.style.display = "block";
+                this.setState({viewMode: 'blocks'});
+
+                return 0;
+
+            case ViewModePython:
+                let blockEditor = document.getElementById('blockly') as HTMLBodyElement;
+                let pyEditor = document.getElementById('editor') as HTMLBodyElement;
+                blockEditor.style.display = "none";
+                pyEditor.style.display = "block";
+                this.setState({viewMode: 'python'});
+
+                return 0;
+
+            case ViewModeSplit:
+                let blocksEditor = document.getElementById('blockly') as HTMLBodyElement;
+                this.setState({viewMode: 'blocks'});
+                this.setState({viewMode: 'python'});
+                blocksEditor.style.display = "block";
+                return 0;
+        }
+    }
+
+    private openTerminal() {
+        if (!this.state.doc.python) {
+            this.setState({modal: 'noCode'});
+
+            return;
+        }
+
+        this.setState({modal: 'terminal'});
+
+        if (this.state.doc.python.indexOf("turtle") !== -1 || this.state.doc.python.indexOf("processing") !== -1 || this.state.doc.python.indexOf("pygal") !== -1) {
+            this.setState({includeTurtle: true})
+        } else {
+            this.setState({includeTurtle: false})
+        }
+
+        if (this.remoteShellView) {
+            this.remoteShellView.focus();
+            this.remoteShellView.reset();
+
+            this.props.app.runCode(this.state.doc.python);
+
+            setTimeout(() => this.remoteShellView!.focus(), 250);
+        }
+    }
+
+    private onBlocklyChange(xml: string, python: string) {
+        this.updateFromBlockly(xml, python);
+    }
+
+    private onPythonChange(python: string) {
+        this.updateFromPython(python);
+    }
+
+    private async openFile() {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            let self = this;
+            const ref = firebase.storage().ref(`blocks/${user.uid}`);
+            ref.listAll().then(function (res) {
+                self.setState({
+                    files: res.items.map((i) => ({
+                        label: i.name,
+                        ref: i,
+                    })),
+                    modal: 'files',
+                });
+            }).catch(function (error) {
+                self.setState({
+                    modal: 'error',
+                });
+                console.error(error);
+            });
+
+        } else {
+            const xml = await this.props.app.openFile();
+            this.readBlocklyContents(xml);
+        }
+    }
+
+    private async openFirebaseFile(file: firebase.storage.Reference) {
+        this.closeModal();
+        let self = this;
+        let newFileName = "";
+        await console.log("Opening file...")
+        if (file.name.indexOf("(Python)") !== -1 && this.state.platform!.key !== "Python") {
+            this.selectPlatform("Python");
+            newFileName = file.name.replace(" (Python)", "");
+
+        }
+        if (file.name.indexOf("(RPi)") !== -1 && this.state.platform!.key !== "RaspberryPi") {
+            this.selectPlatform("RaspberryPi");
+            newFileName = file.name.replace(" (RPi)", "");
+
+        }
+        if (file.name.indexOf("(microbit)") !== -1 && this.state.platform!.key !== "MicroBit") {
+            this.selectPlatform("MicroBit");
+            newFileName = file.name.replace(" (microbit)", "");
+
+        }
+        if (file.name.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key !== "CircuitPython") {
+            this.selectPlatform("CircuitPython");
+            newFileName = file.name.replace(" (CircuitPython)", "");
+
+        }
+
+        if (file.name.indexOf("(Python)") !== -1 && this.state.platform!.key === "Python") {
+            newFileName = file.name.replace(" (Python)", "");
+
+        }
+        if (file.name.indexOf("(RPi)") !== -1 && this.state.platform!.key === "RaspberryPi") {
+            newFileName = file.name.replace(" (RPi)", "");
+
+        }
+        if (file.name.indexOf("(microbit)") !== -1 && this.state.platform!.key === "MicroBit") {
+            newFileName = file.name.replace(" (microbit)", "");
+
+        }
+        if (file.name.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key === "CircuitPython") {
+            newFileName = file.name.replace(" (CircuitPython)", "");
+        }
+
+        (document.getElementById("filename") as HTMLInputElement).value = newFileName;
+
+        this.setState({fileName: newFileName});
+        file.getDownloadURL().then(function (url) {
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'text';
+            xhr.onload = function (event) {
+                self.readBlocklyContents(xhr.responseText);
+            };
+            xhr.open('GET', url);
+            xhr.send();
+        }).catch(function (error) {
+            self.setState({
+                modal: 'error',
+            });
+            console.error(error);
+        });
+
+    }
+
+    private async deleteFirebaseFile(file: firebase.storage.Reference) {
+        file.delete();
+        this.closeModal();
+    }
+
+    private delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    private async shareFirebaseFile(file: firebase.storage.Reference) {
+        let filePlatform = ""
+        if (file.name.indexOf("(Python)") !== -1) {
+            filePlatform = "Python"
+        }
+        if (file.name.indexOf("(RPi)") !== -1) {
+            filePlatform = "RaspberryPi"
+        }
+        if (file.name.indexOf("(microbit)") !== -1) {
+            filePlatform = "MicroBit"
+        }
+        if (file.name.indexOf("(CircuitPython)") !== -1) {
+            filePlatform = "CircuitPython"
+        }
+        let fileURL = await file.getDownloadURL();
+        let newFileURL = fileURL.substring(0, fileURL.indexOf('&token='));
+        const encoded = btoa(newFileURL);
+        const edublocksLink = "https://app.edublocks.org/#share?" + filePlatform + "?" + encoded;
+        await this.setState({shareURL: edublocksLink});
+        await this.setState({shareFileName: file.name});
+        await console.log(this.state.shareURL);
+        await this.setState({modal: "shareoptions", prevModal: null});
+    }
+
+    private async runShareOptions(func: ShareOptions) {
+        if (func === 'Share to Google Classroom') {
+            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
+            this.setState({modal: "generating"});
+
+            const response = await fetch(
+                shareableURL
+            );
+
+            const body = await response.json();
+
+            console.log(this.state.shareURL)
+            await this.closeModal()
+            if (response.ok) {
+                const shortLink = "https://share.edublocks.org/" + body.result.code
+                await console.log(this.state.shareURL)
+                await this.setState({shareURL: shortLink});
+                window.open("https://classroom.google.com/u/0/share?url=" + encodeURIComponent(this.state.shareURL) + "&usegapi=1&id=I0_1591303124637&parent=https%3A%2F%2Fwww.gstatic.com&pfname=%2FI0_1591303123749&rpctoken=58755424&jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.utl9jrRztb8.O%2Fam%3DwQE%2Fd%3D1%2Fct%3Dzgms%2Frs%3DAGLTcCOUgIiKp6EMsn7UOgLQFm23i5pjzQ%2Fm%3D__features__", '1591307119253', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=600,top=300')
+                this.closeModal()
+            } else {
+                console.log(console.error());
+            }
+        }
+        if (func === 'Share to Microsoft Teams') {
+            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
+            this.setState({modal: "generating"});
+
+            const response = await fetch(
+                shareableURL
+            );
+
+            const body = await response.json();
+
+            console.log(this.state.shareURL)
+            await this.closeModal()
+            if (response.ok) {
+                const shortLink = "https://share.edublocks.org/" + body.result.code
+                await console.log(this.state.shareURL)
+                await this.setState({shareURL: shortLink});
+                window.open("https://teams.microsoft.com/share?href=" + encodeURIComponent(this.state.shareURL), '1591307119253', 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=600,top=300')
+                this.closeModal()
+            } else {
+                console.log(console.error());
+            }
+        }
+        if (func === 'Copy Shareable URL') {
+            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
+            this.setState({modal: "generating"});
+
+            const response = await fetch(
+                shareableURL
+            );
+
+            const body = await response.json();
+
+            console.log(this.state.shareURL)
+            await this.closeModal()
+            if (response.ok) {
+                const shortLink = "https://share.edublocks.org/" + body.result.code
+                await console.log(this.state.shareURL)
+                await this.setState({shareURL: shortLink});
+                await copy(this.state.shareURL)
+                await this.closeModal()
+                await this.setState({modal: "share"});
+            } else {
+                console.log(console.error());
+            }
+        }
+
+        if (func === 'Copy Embed Code') {
+            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
+            this.setState({modal: "generating"});
+
+            const response = await fetch(
+                shareableURL
+            );
+
+            const body = await response.json();
+
+            console.log(shareableURL)
+
+            if (response.ok) {
+                const embedLink = '<iframe src="https://share.edublocks.org/' + body.result.code + '" height="600px" width="900px"></iframe>'
+                await console.log(embedLink)
+                await this.setState({shareURL: embedLink});
+                await copy(this.state.shareURL)
+                await this.setState({modal: "share"});
+            } else {
+                console.log(console.error());
+            }
+        }
+        if (func === 'Share to Public Gallery (BETA)') {
+            let shareableURL = "https://api.shrtco.de/v2/shorten?url=" + encodeURIComponent(this.state.shareURL);
+            this.setState({modal: "generating"});
+
+            let newFileName = "";
+            let platform = "";
+
+            if (this.state.shareFileName.indexOf("(Python)") !== -1 && this.state.platform!.key === "Python") {
+                newFileName = this.state.shareFileName.replace(" (Python)", "");
+                platform = "Python"
+
+            }
+            if (this.state.shareFileName.indexOf("(RPi)") !== -1 && this.state.platform!.key === "RaspberryPi") {
+                newFileName = this.state.shareFileName.replace(" (RPi)", "");
+                platform = "RPi"
+
+            }
+            if (this.state.shareFileName.indexOf("(microbit)") !== -1 && this.state.platform!.key === "MicroBit") {
+                newFileName = this.state.shareFileName.replace(" (microbit)", "");
+                platform = "microbit"
+
+            }
+            if (this.state.shareFileName.indexOf("(CircuitPython)") !== -1 && this.state.platform!.key === "CircuitPython") {
+                newFileName = this.state.shareFileName.replace(" (CircuitPython)", "");
+                platform = "CircuitPython"
+            }
+
+            const response = await fetch(
+                shareableURL
+            );
+
+            const body = await response.json();
+
+            if (response.ok) {
+                var db = firebase.firestore();
+
+                db.collection("shared").add({
+                    name: newFileName,
+                    url: "https://share.edublocks.org/" + body.result.code,
+                    platform: platform
+                })
+
+                this.closeModal()
+                alert("Project live on https://projects.edublocks.org")
+            } else {
+                console.log(console.error());
+            }
+        }
+    }
+
+    private async saveFile() {
+        const xml = this.state.doc.xml;
+
+        if (this.state.extensionsActive.length > 1) {
+            await this.setState({modal: "error", "prevModal": null});
+        } else {
+            if (xml) {
+                const user = firebase.auth().currentUser;
+
+                if (user) {
+                    let self = this;
+                    this.setState({
+                        modal: 'progress',
+                    });
+                    let plat = "";
+
+                    if (this.state.platform!.key === "Python") {
+                        plat = " (Python)"
+                    }
+                    if (this.state.platform!.key === "MicroBit") {
+                        plat = " (microbit)"
+                    }
+                    if (this.state.platform!.key === "RaspberryPi") {
+                        plat = " (RPi)"
+                    }
+                    if (this.state.platform!.key === "CircuitPython") {
+                        plat = " (CircuitPython)"
+                    }
+
+                    const ref = firebase.storage().ref(`blocks/${user.uid}/${this.state.fileName}${plat}`);
+                    const task = ref.putString(xml, undefined, {
+                        contentType: 'text/xml',
+                    });
+                    task.on('state_changed', function (snapshot) {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes);
+                        self.setState({
+                            progress: progress,
+                        });
+                    }, function (error) {
+                        self.setState({
+                            modal: 'error',
+                        });
+                        console.error(error);
+                    }, function () {
+                        self.closeModal();
+                    });
+                } else {
+                    await this.props.app.saveFile(this.state.fileName, xml, 'xml', 'text/xml;charset=utf-8');
+                }
+            }
+        }
+    }
+
+    private async downloadPython() {
+        const python = this.state.doc.python;
+
+        if (python) {
+            await this.props.app.exportPython(this.state.fileName, python, this.state.extensionsActive);
+        }
+    }
+
+    private async downloadHex() {
+        const python = this.state.doc.python;
+
+        if (python) {
+            this.props.app.saveHex(this.state.fileName, python, this.state.extensionsActive);
+        }
+    }
+
+    private async selectPlatform(platformKey: Platform) {
+        this.closeModal()
+        const platform = await getPlatform(platformKey);
+
+        if (platformKey === "CircuitPython") {
+            let filebox = document.getElementById("filename");
+            this.setState({"fileName": "code"});
+            filebox!.style.display = "none";
+        } else {
+            let filebox = document.getElementById("filename");
+            filebox!.style.display = "block";
+        }
+
+        if (platformKey === 'RaspberryPi') {
+            let ip: string | null = null;
+
+            if (window.location.protocol === 'https:') {
+                alert('Need to switch to HTTP to access Raspberry Pi mode...');
+                window.location.protocol = 'http:';
+                return;
+            }
+
+            if (navigator.platform.indexOf('arm') !== -1) {
+                await this.props.app.initConnection('localhost');
+            } else {
+                ip = prompt('Please enter your Raspberry Pi\'s IP address');
+
+                if (!ip) return;
+
+                try {
+                    await this.props.app.initConnection(ip);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        }
+
+        this.setState({
+            platform,
+            modal: null,
+            extensionsActive: platform.defaultExtensions,
+        });
+
+        if (split === true) {
+            this.switchView(ViewModeBlockly);
+
+            await this.splitView(false);
+
+            split = true
+            this.splitView(true);
+        } else {
+            this.switchView(ViewModeBlockly);
+        }
+    }
+
+    private closeModal() {
+        this.setState({modal: this.state.prevModal, prevModal: null});
+
+    }
+
+    private openAuth() {
+        this.setState({modal: 'auth', prevModal: this.state.modal});
+    }
+
+    private openSamples() {
+        this.setState({modal: 'samples'});
+    }
+
+    private async selectSample(file: string) {
+        this.new()
+        await this.setState({modal: null});
+
+        const xml = this.props.app.getSample(this.state.platform!.key, file);
+
+        await this.readBlocklyContents(xml);
+
+
+    }
+
+    private openThemes() {
+        this.setState({modal: 'themes'});
+    }
+
+    private selectTheme(theme: string) {
+        this.closeModal();
+
+        Cookies.set("theme", theme, {expires: 100000})
+
+        document.body.className = `theme-${theme}`;
+    }
+
+    private openExtensions() {
+        this.setState({modal: 'extensionsnew'});
+    }
+
+    private selectExtension(extension: Extension) {
+        this.closeModal();
+
+        const {extensionsActive} = this.state;
+
+        this.setState({
+            extensionsActive: [...extensionsActive, extension],
+        });
+    }
+
+    private onTerminalClose() {
+        this.closeModal();
+    }
+
+    private hasCapability(capability: Capability) {
+        if (!this.state.platform) return false;
+
+        return this.state.platform.capabilities.indexOf(capability) !== -1;
+
+    }
+
+    private getExtensions() {
+        if (!this.state.platform) return [];
+
+        return this.state.platform.extensions;
+    }
+
+    private initTerminal(terminalView: RemoteShellView) {
+        if (this.remoteShellView !== terminalView) {
+            this.remoteShellView = terminalView;
+
+            this.props.app.assignTerminal(terminalView);
+        }
+    }
+
+    private getPythonCode() {
+        return this.state.doc.python || '';
+    }
+
+    private openAdvancedFunctionDialog() {
+        this.setState({modal: 'functions'});
+    }
+
+    private fileChange(fileName: string) {
+        this.setState({fileName});
+    }
+
+    private openPlatforms() {
+        this.new();
+        this.setState({modal: 'platform'});
+    }
+
+    private modeQuestion() {
+        this.setState({modal: 'codeOverwrite'});
+    }
+
+    private getAdvancedFunctionList(): SelectModalOption[] {
+        let advancedFunctions = AdvancedFunctions;
+
+        if (this.state.platform && this.state.platform.capabilities.indexOf('HexFlash') !== -1) {
+            advancedFunctions = [...advancedFunctions, 'Flash Hex'];
+            advancedFunctions = [...advancedFunctions, 'Extensions'];
+        }
+
+        return advancedFunctions.map((func) => ({
+            label: func,
+            obj: func,
+        }));
+    }
+
+    private getShareOptionsList(): SelectModalOption[] {
+        let shareOptions = ShareOptions;
+
+        return shareOptions.map((func) => ({
+            label: func,
+            obj: func,
+        }));
+    }
+
+    private getLanguagesList(): SelectModalOption[] {
+        let languages = Languages;
+
+        return languages.map((func) => ({
+            label: func,
+            obj: func,
+        }));
+    }
+
+    private async runLanguages(func: Languages) {
+        if (func === 'English') {
+            GlobalVars.openFiles = "Open";
+
+            navLabels = ["New", "Open", "Save", "Samples", "Extras", "Run", "Login", "Untitled", "Download Hex", "Download", "Themes", "Share"];
+
+            generic = ["Open",
+                "Go",
+                "Select",
+                "Close",
+                "Delete",
+                "Yes",
+                "No",
+                "Attention!",
+                "There is no code to run!",
+                "Changing mode will make you lose your code, do you wish to continue?",
+                "Uploading...",
+                "Select your mode",
+                "Files"];
+
+            document.getElementById("menubar")!.innerHTML = navLabels[0];
+            document.getElementById("menubar")!.innerHTML = generic[0];
+            await this.closeModal();
+        }
+
+        if (func === 'French') {
+            GlobalVars.openFiles = "Ouvrir";
+
+            navLabels = ["Nouveau", "Ouvrir", "Sauvegarder", "Exemples", "Préférences", "Exécuter", "S'identifier", "Sans Titre", "Télécharger Hex", "Télécharger", "Thèmes", "Partager"];
+
+            generic = ["Ouvert",
+                "Aller",
+                "Sélectionner",
+                "Fermer",
+                "Effacer",
+                "Oui",
+                "Non",
+                "Attention!",
+                "Il n’y a pas de code à exécuter!",
+                "Changer le mode te fera perdre ton code, souhaites-tu continuer?",
+                "Téléchargement...",
+                "Sélectionnez votre mode",
+                "Des dossiers"];
+
+            document.getElementById("menubar")!.innerHTML = generic[0];
+            document.getElementById("menubar")!.innerHTML = navLabels[0];
+            await this.closeModal();
+        }
+
+        if (func === 'German') {
+            GlobalVars.openFiles = "Öffnen";
+
+            navLabels = ["Neu", "Öffnen", "Speichern", "Proben", "Extras", "Ausführen", "Login", "Unbetitelt", "Herunterladen Hex", "Herunterladen", "Themen", "Teilen"];
+
+            generic = ["Öffnen",
+                "Los",
+                "Markieren",
+                "Schließen",
+                "Löschen",
+                "Ja",
+                "Nein",
+                "Achtung!",
+                "Es ist kein Code zum Ausführen!",
+                "Wenn sie den Modus ändern, wird ihr Code gelöscht. Möchten sie fortfahren?",
+                "Wird hochgeladen...",
+                "Wählen sie ihren Modus aus",
+                "Dateien"];
+
+            document.getElementById("menubar")!.innerHTML = generic[0];
+            document.getElementById("menubar")!.innerHTML = navLabels[0];
+            await this.closeModal();
+        }
+
+        if (func === 'Welsh') {
+            GlobalVars.openFiles = "Agor";
+
+            navLabels = ["Newydd", "Agor", "Cadw", "Samplau", "Yn ychwanegol", "Rhedeg", "Mewngofnodi", "Heb enw", "Lawrlwython Hex", "Lawrlwython", "Themâu", "Rhannu"];
+
+            generic = ["Agor",
+                "Mynd",
+                "Dewis",
+                "Cau",
+                "Dileu",
+                "Ie",
+                "Na",
+                "Eich sylw!",
+                "Nid oes cod i'w redeg!",
+                "Fe fydd newid modd yn achosi colled cod, ydych chi esiau parhau?",
+                "Yn lanlwytho...",
+                "Dewiswch eith modd",
+                "Ffeiliau"];
+
+            document.getElementById("menubar")!.innerHTML = generic[0];
+            document.getElementById("menubar")!.innerHTML = navLabels[0];
+            await this.closeModal();
+        }
+    }
+
+    private async splitView(toggle: boolean) {
+        if (toggle === true) {
+            split = true;
+            let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
+            let pythonEditor = document.getElementById('python') as HTMLBodyElement;
+            let editorElement = document.getElementById('editor') as HTMLBodyElement;
+            let toggleElement = document.getElementById('toggleViewButton') as HTMLBodyElement;
+            let exitElement = document.getElementById('ExitSplit') as HTMLBodyElement;
+
+            blocklyEditor.style.width = "60%";
+            editorElement.style.width = "40%";
+            toggleElement.style.display = "none";
+            exitElement.style.display = "block";
+
+            window.dispatchEvent(new Event('resize'))
+
+            pythonEditor.classList.add("show-editor");
+
+            this.switchView(ViewModeSplit)
+
+            blocklyEditor.style.display = "block";
+
+            this.closeModal()
+
+        }
+
+        if (toggle === false) {
+            split = false;
+            let editorElement = document.getElementById('editor') as HTMLBodyElement;
+            let blocklyEditor = document.getElementById('blockly') as HTMLBodyElement;
+            let exitElement = document.getElementById('ExitSplit') as HTMLBodyElement;
+            let toggleElement = document.getElementById('toggleViewButton') as HTMLBodyElement;
+
+            toggleElement.style.display = "block";
+            exitElement.style.display = "none";
+
+            window.dispatchEvent(new Event('resize'))
+
+            blocklyEditor.style.width = "100%";
+            editorElement.style.width = "100%";
+
+            window.dispatchEvent(new Event('resize'))
+
+            this.switchView(ViewModeBlockly);
+
+        }
+    }
+
+    private async runAdvancedFunction(func: AdvancedFunction) {
+        if (func === 'Export Python') {
+            await this.downloadPython();
+            await this.closeModal();
+
+        }
+
+        if (func === 'Themes') {
+            await this.openThemes();
+
+        }
+
+        if (func === 'Split View') {
+            this.splitView(true)
+        }
+
+
+        if (func === 'Switch Language') {
+            this.setState({modal: 'languages'});
+        }
+
+        if (func === 'Extensions') {
+            await this.openExtensions();
+        }
+
+        if (func === 'Flash Hex') {
+            const python = this.state.doc.python;
+
+            if (python) {
+                this.setState({modal: 'progress', progress: 0});
+
+                try {
+                    await this.props.app.flashHex(python, this.state.extensionsActive, (progress) => {
+                        this.setState({progress});
+                    });
+                } finally {
+                    this.setState({modal: null});
+                }
+            }
+        }
+
+
     }
 }

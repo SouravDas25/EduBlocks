@@ -1,77 +1,78 @@
 import React = require('preact');
-import { Component } from 'preact';
+import {Component} from 'preact';
 
 interface Props {
-  visible: boolean;
-  turtle: boolean;
-  pythonCode: string;
+    visible: boolean;
+    turtle: boolean;
+    pythonCode: string;
 
-  onClose(): void;
+    onClose(): void;
 }
 
 export let josh = "hi"
 
 export default class TrinketView extends Component<Props, {}> {
-  private escapeListener = (e: KeyboardEvent) => {
-    if (e.keyCode === 27) {
-      this.close();
+    constructor(props: Props) {
+        super(props);
     }
-  }
 
-  constructor(props: Props) {
-    super(props);
-  }
+    public componentDidMount() {
+        window.addEventListener('keydown', this.escapeListener);
+    }
 
-  public componentDidMount() {
-    window.addEventListener('keydown', this.escapeListener);
-  }
+    public componentDidUpdate() {
 
-  public componentDidUpdate() {
+    }
 
-  }
+    public componentWillUnmount() {
+        window.removeEventListener('keydown', this.escapeListener);
+    }
 
-  public componentWillUnmount() {
-    window.removeEventListener('keydown', this.escapeListener);
-  }
+    public close() {
+        this.props.onClose();
+    }
 
-  private getEscapedCode() {
-    console.log(this.props.pythonCode);
+    public render() {
+        return (
+            <div class='TrinketView' style={{display: this.props.visible ? 'block' : 'none'}} id='terminal-dialog'>
+                <div class='terminal-help'>
+                    <a class='icon-cancel-circled' title="Create new file" href='javascript:void(0)'
+                       onClick={() => this.close()}>
+                        Exit
+                    </a>
+                </div>
 
-    return encodeURIComponent(this.props.pythonCode);
-  }
+                <div class='TrinketView__Container'>
+                    <div class='TrinketView__ContainerLoading'/>
 
-  public close() {
-    this.props.onClose();
-  }
+                    {this.props.visible &&
+                    <iframe
+                        frameBorder={0}
+                        src={`https://trinket.io/tools/1.0/jekyll/embed/python?runOption=run&outputOnly=true&start=result#code=${this.getEscapedCode()}`}
+                    />
+                    }
 
-  public render() {
-    return (
-      <div class='TrinketView' style={{ display: this.props.visible ? 'block' : 'none' }} id='terminal-dialog'>
-        <div class='terminal-help'>
-          <a class='icon-cancel-circled' title="Create new file" href='javascript:void(0)' onClick={() => this.close()}>
-            Exit
-          </a>
-        </div>
+                    {this.props.turtle &&
+                    <iframe
+                        frameBorder={0}
+                        src={`https://trinket.io/tools/1.0/jekyll/embed/python?runOption=run&outputOnly=true&start=result#code=${this.getEscapedCode()}`}
+                    />
+                    }
+                </div>
 
-        <div class='TrinketView__Container'>
-          <div class='TrinketView__ContainerLoading' />
+            </div>
+        );
+    }
 
-          {this.props.visible && 
-            <iframe
-              frameBorder={0}
-              src={`https://trinket.io/tools/1.0/jekyll/embed/python?runOption=run&outputOnly=true&start=result#code=${this.getEscapedCode()}`}
-            />
-          }
+    private escapeListener = (e: KeyboardEvent) => {
+        if (e.keyCode === 27) {
+            this.close();
+        }
+    }
 
-          {this.props.turtle &&
-            <iframe
-              frameBorder={0}
-              src={`https://trinket.io/tools/1.0/jekyll/embed/python?runOption=run&outputOnly=true&start=result#code=${this.getEscapedCode()}`}
-            />
-          }
-        </div>
+    private getEscapedCode() {
+        console.log(this.props.pythonCode);
 
-      </div>
-    );
-  }
+        return encodeURIComponent(this.props.pythonCode);
+    }
 }
