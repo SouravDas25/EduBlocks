@@ -10,7 +10,7 @@ nav.demo {
 
 A responsive, pure css navigation menu:
 
-> On these smaller versions it might have small glitches. Please see the top, page-wide nav to see the actual effect.  
+> On these smaller versions it might have small glitches. Please see the top, page-wide nav to see the actual effect.
 
 ```html
 <nav class="demo">
@@ -30,19 +30,19 @@ A responsive, pure css navigation menu:
 </nav>
 ```
 
-
 ### Responsive
 
-The nav is responsive by default. The text inside the `<label>` can be changed for the following characters for a different effect ([source](https://css-tricks.com/three-line-menu-navicon/)):
+The nav is responsive by default. The text inside the `<label>` can be changed for the following characters for a
+different effect ([source](https://css-tricks.com/three-line-menu-navicon/)):
 
 - Identical to `&#8801;` (safe on mobile): <label class="pseudo button">&#8801;</label>
 - Trigram for heaven `&#9776;`: <label class="pseudo button">&#9776;</label>
 - Any other: <i class="pseudo button icon-cog"></i>
 
-
 ### Different height and big logo
 
-Thanks to a [vertical-align trick](http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/), you can set it up to any height you want:
+Thanks to a [vertical-align trick](http://zerosixthree.se/vertical-align-anything-with-just-3-lines-of-css/), you can
+set it up to any height you want:
 
 ```css
 nav.imponent {
@@ -62,7 +62,6 @@ nav.imponent {
   </a>
 </nav>
 ```
-
 
 ### Form elements
 
@@ -99,7 +98,6 @@ Just get anything you want inside the nav, most things should work.
   </div>
 </nav>
 ```
-
 
 ### Fixed position
 

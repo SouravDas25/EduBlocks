@@ -17,7 +17,7 @@ $picnic-select-dropimage: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d
   // Compatible with modern browsers
   background-position: calc(100% - 15px) center;
 
-  
+
   border: $picnic-border;
   border-radius: $picnic-radius;
   cursor: pointer;
@@ -26,7 +26,7 @@ $picnic-select-dropimage: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d
   box-sizing: border-box;
   padding: $picnic-select-padding;
   transition: all .3s;
-  
+
 
   // Hide dropdown arrow
 
@@ -41,21 +41,21 @@ $picnic-select-dropimage: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d
   // http://stackoverflow.com/a/15933790 version
   &::-ms-expand {
     display: none;
-    }
+  }
 
   &:focus,
   &:active {
     border: 1px solid $picnic-primary;
     transition: outline 0s;
-    }
+  }
 
   &:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 $picnic-black;
-    }
+  }
 
   option {
     font-size: inherit;
     padding: $picnic-separation / 2 $picnic-separation * .75;
-    }
   }
+}

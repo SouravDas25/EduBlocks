@@ -27,7 +27,7 @@ $picnic-tooltip-size: .8em !default;
     top: calc(100% - 6px);
     left: 0;
     margin-top: 12px;
-    }
+  }
 
   // This is the acutal label-like element
   &:after {
@@ -43,7 +43,7 @@ $picnic-tooltip-size: .8em !default;
 
     // Behaviour
     white-space: nowrap;
-    }
+  }
 
   // This is the small arrow
   &:before {
@@ -57,7 +57,7 @@ $picnic-tooltip-size: .8em !default;
     border-color: transparent transparent $picnic-tooltip-background;
     margin-top: 0;
     left: 10px;
-    }
+  }
 
   &:hover:after,
   &:focus:after,
@@ -66,14 +66,13 @@ $picnic-tooltip-size: .8em !default;
     opacity: 1;
     border-width: 6px;
     height: auto;
-    }
+  }
 
   &:hover:after,
   &:focus:after {
     padding: $picnic-separation * .75 $picnic-separation * 1.5;
-    }
   }
-
+}
 
 
 // Top
@@ -84,14 +83,14 @@ $picnic-tooltip-size: .8em !default;
     bottom: calc(100% - 6px);
     left: 0;
     margin-bottom: 12px;
-    }
+  }
 
   &:before {
     border-color: $picnic-tooltip-background transparent transparent;
     margin-bottom: 0;
     left: 10px;
-    }
   }
+}
 
 // Right
 .tooltip-right {
@@ -101,15 +100,15 @@ $picnic-tooltip-size: .8em !default;
     margin-left: 6px;
     margin-top: 0;
     top: 0;
-    }
+  }
 
   &:before {
     border-color: transparent $picnic-tooltip-background transparent transparent;
     margin-left: -6px;
     left: 100%;
     top: 7px;
-    }
   }
+}
 
 // Left
 .tooltip-left {
@@ -120,15 +119,15 @@ $picnic-tooltip-size: .8em !default;
     left: auto;
     margin-top: 0;
     top: 0;
-    }
+  }
 
   &:before {
     border-color: transparent transparent transparent $picnic-tooltip-background;
     margin-right: -6px;
     right: 100%;
     top: 7px;
-    }
   }
+}
 
 
 

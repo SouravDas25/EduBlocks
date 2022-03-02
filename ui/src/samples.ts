@@ -1,10 +1,11 @@
 import path = require('path');
 import changeCase = require('change-case');
-import { Platform } from './types';
+import {Platform} from './types';
+
 const includeFolder: (folderPath: string) => { [file: string]: string } = require('include-folder');
 
 interface PlatformSamples {
-  [name: string]: string;
+    [name: string]: string;
 }
 
 type AllPlatformSamples = Partial<Record<Platform, PlatformSamples>>;
@@ -26,37 +27,37 @@ registerSamples('RaspberryPi', piSamples);
 // ... other platforms (like above) ...
 
 function registerSamples(platform: Platform, foundSamples: { [file: string]: string }) {
-  Samples[platform] = {};
+    Samples[platform] = {};
 
-  Object.keys(foundSamples).forEach((file) => {
-    Samples[platform]![changeCase.titleCase(file)] = foundSamples[file];
-  });
+    Object.keys(foundSamples).forEach((file) => {
+        Samples[platform]![changeCase.titleCase(file)] = foundSamples[file];
+    });
 }
 
 export function newSamples() {
-  function getSamples(platform: Platform) {
-    const platformSamples = Samples[platform];
+    function getSamples(platform: Platform) {
+        const platformSamples = Samples[platform];
 
-    if (!platformSamples) {
-      // throw new Error('No samples found');
-      return [];
+        if (!platformSamples) {
+            // throw new Error('No samples found');
+            return [];
+        }
+
+        return Object.keys(platformSamples);
     }
 
-    return Object.keys(platformSamples);
-  }
+    function getSample(platform: Platform, file: string) {
+        const platformSamples = Samples[platform];
 
-  function getSample(platform: Platform, file: string) {
-    const platformSamples = Samples[platform];
+        if (!platformSamples) {
+            throw new Error('No samples found');
+        }
 
-    if (!platformSamples) {
-      throw new Error('No samples found');
+        return platformSamples[file];
     }
 
-    return platformSamples[file];
-  }
-
-  return {
-    getSamples,
-    getSample,
-  };
+    return {
+        getSamples,
+        getSample,
+    };
 }

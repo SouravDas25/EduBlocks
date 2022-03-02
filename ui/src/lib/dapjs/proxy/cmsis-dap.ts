@@ -21,20 +21,20 @@
 * SOFTWARE.
 */
 
-import { EventEmitter } from "events";
-import { Transport } from "../transport";
+import {EventEmitter} from "events";
+import {Transport} from "../transport";
 import {
-    DAPPort,
-    DAPTransferMode,
-    DAPProtocol,
     DAPCommand,
     DAPConnectResponse,
-    DAPResponse,
     DAPInfoRequest,
+    DAPPort,
+    DAPProtocol,
     DAPResetTargeResponse,
+    DAPResponse,
+    DAPTransferMode,
     DAPTransferResponse
 } from "./enums";
-import { Proxy, DAPOperation } from "./";
+import {DAPOperation, Proxy} from "./";
 
 /**
  * @hidden
@@ -95,84 +95,6 @@ export class CmsisDAP extends EventEmitter implements Proxy {
         this.operationCount = Math.floor(operationSpace / TRANSFER_OPERATION_SIZE);
     }
 
-    private delay(timeout: number): Promise<void> {
-        return new Promise((resolve, _reject) => {
-            setTimeout(resolve, timeout);
-        });
-    }
-
-    private bufferSourceToUint8Array(prefix: number, data?: BufferSource): Uint8Array {
-
-        if (!data) {
-            return new Uint8Array([prefix]);
-        }
-
-        function isView(source: ArrayBuffer | ArrayBufferView): source is ArrayBufferView {
-            return (source as ArrayBufferView).buffer !== undefined;
-        }
-
-        const arrayBuffer = isView(data) ? data.buffer : data;
-        const result = new Uint8Array(arrayBuffer.byteLength + 1);
-
-        result.set([prefix]);
-        result.set(new Uint8Array(arrayBuffer), 1);
-
-        return result;
-    }
-
-    /**
-     * Switches the CMSIS-DAP unit to use SWD
-     * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0316d/Chdhfbhc.html
-     */
-    protected selectProtocol(protocol: DAPProtocol): Promise<void> {
-        const sequence = protocol === DAPProtocol.JTAG ? JTAG_SEQUENCE : SWD_SEQUENCE;
-
-        return this.swjSequence(new Uint8Array([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])) // Sequence of 1's
-        .then(() => this.swjSequence(new Uint16Array([sequence]))) // Send protocol sequence
-        .then(() => this.swjSequence(new Uint8Array([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]))) // Sequence of 1's
-        .then(() => this.swjSequence(new Uint8Array([0x00])));
-    }
-
-    /**
-     * Send a command
-     * @param command Command to send
-     * @param data Data to use
-     * @returns Promise of DataView
-     */
-    protected send(command: number, data?: BufferSource): Promise<DataView> {
-        const array = this.bufferSourceToUint8Array(command, data);
-
-        return this.transport.write(array)
-        .then(() => this.transport.read())
-        .then(response => {
-            if (response.getUint8(0) !== command) {
-                throw new Error(`Bad response for ${command} -> ${response.getUint8(0)}`);
-            }
-
-            switch (command) {
-                case DAPCommand.DAP_DISCONNECT:
-                case DAPCommand.DAP_WRITE_ABORT:
-                case DAPCommand.DAP_DELAY:
-                case DAPCommand.DAP_RESET_TARGET:
-                case DAPCommand.DAP_SWJ_CLOCK:
-                case DAPCommand.DAP_SWJ_SEQUENCE:
-                case DAPCommand.DAP_SWD_CONFIGURE:
-                case DAPCommand.DAP_SWD_SEQUENCE:
-                case DAPCommand.DAP_SWO_TRANSPORT:
-                case DAPCommand.DAP_SWO_MODE:
-                case DAPCommand.DAP_SWO_CONTROL:
-                case DAPCommand.DAP_JTAG_CONFIGURE:
-                case DAPCommand.DAP_JTAG_ID_CODE:
-                case DAPCommand.DAP_TRANSFER_CONFIGURE:
-                    if (response.getUint8(1) !== DAPResponse.DAP_OK) {
-                        throw new Error(`Bad status for ${command} -> ${response.getUint8(1)}`);
-                    }
-            }
-
-            return response;
-        });
-    }
-
     /**
      * Get DAP information
      * @param request Type of information to get
@@ -180,31 +102,31 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      */
     public dapInfo(request: DAPInfoRequest): Promise<number | string> {
         return this.send(DAPCommand.DAP_INFO, new Uint8Array([request]))
-        .then(result => {
-            const length = result.getUint8(1);
+            .then(result => {
+                const length = result.getUint8(1);
 
-            if (length === 0) {
-                throw new Error("DAP Info Failure");
-            }
+                if (length === 0) {
+                    throw new Error("DAP Info Failure");
+                }
 
-            switch (request) {
-                case DAPInfoRequest.CAPABILITIES:
-                case DAPInfoRequest.PACKET_COUNT:
-                case DAPInfoRequest.PACKET_SIZE:
-                case DAPInfoRequest.SWO_TRACE_BUFFER_SIZE:
-                    // Byte
-                    if (length === 1) return result.getUint8(2);
+                switch (request) {
+                    case DAPInfoRequest.CAPABILITIES:
+                    case DAPInfoRequest.PACKET_COUNT:
+                    case DAPInfoRequest.PACKET_SIZE:
+                    case DAPInfoRequest.SWO_TRACE_BUFFER_SIZE:
+                        // Byte
+                        if (length === 1) return result.getUint8(2);
 
-                    // Short
-                    if (length === 2) return result.getUint16(2);
+                        // Short
+                        if (length === 2) return result.getUint16(2);
 
-                    // Word
-                    if (length === 4) return result.getUint32(2);
-            }
+                        // Word
+                        if (length === 4) return result.getUint32(2);
+                }
 
-            const ascii = Array.prototype.slice.call(new Uint8Array(result.buffer, 2, length));
-            return String.fromCharCode.apply(null, ascii);
-        });
+                const ascii = Array.prototype.slice.call(new Uint8Array(result.buffer, 2, length));
+                return String.fromCharCode.apply(null, ascii);
+            });
     }
 
     /**
@@ -218,7 +140,7 @@ export class CmsisDAP extends EventEmitter implements Proxy {
         const data = this.bufferSourceToUint8Array(bitLength, sequence);
 
         return this.send(DAPCommand.DAP_SWJ_SEQUENCE, data)
-        .then(() => undefined);
+            .then(() => undefined);
     }
 
     /**
@@ -238,7 +160,7 @@ export class CmsisDAP extends EventEmitter implements Proxy {
         view.setUint16(3, matchRetry, true);
 
         return this.send(DAPCommand.DAP_TRANSFER_CONFIGURE, data)
-        .then(() => undefined);
+            .then(() => undefined);
     }
 
     /**
@@ -247,15 +169,15 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      */
     public connect(): Promise<void> {
         return this.transport.open()
-        .then(() => this.send(DAPCommand.DAP_SWJ_CLOCK, new Uint32Array([this.clockFrequency])))
-        .then(() => this.send(DAPCommand.DAP_CONNECT, new Uint8Array([this.mode])))
-        .then(result => {
-            if (result.getUint8(1) === DAPConnectResponse.FAILED || this.mode !== DAPProtocol.DEFAULT && result.getUint8(1) !== this.mode) {
-                throw new Error("Mode not enabled.");
-            }
-        })
-        .then(() => this.configureTransfer(0, 100, 0))
-        .then(() => this.selectProtocol(DAPProtocol.SWD));
+            .then(() => this.send(DAPCommand.DAP_SWJ_CLOCK, new Uint32Array([this.clockFrequency])))
+            .then(() => this.send(DAPCommand.DAP_CONNECT, new Uint8Array([this.mode])))
+            .then(result => {
+                if (result.getUint8(1) === DAPConnectResponse.FAILED || this.mode !== DAPProtocol.DEFAULT && result.getUint8(1) !== this.mode) {
+                    throw new Error("Mode not enabled.");
+                }
+            })
+            .then(() => this.configureTransfer(0, 100, 0))
+            .then(() => this.selectProtocol(DAPProtocol.SWD));
     }
 
     /**
@@ -264,9 +186,9 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      */
     public disconnect(): Promise<void> {
         return this.send(DAPCommand.DAP_DISCONNECT)
-        .then(() => {
-            return this.transport.close();
-        });
+            .then(() => {
+                return this.transport.close();
+            });
     }
 
     /**
@@ -275,8 +197,8 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      */
     public reconnect(): Promise<void> {
         return this.disconnect()
-        .then(() => this.delay(100))
-        .then(() => this.connect());
+            .then(() => this.delay(100))
+            .then(() => this.connect());
     }
 
     /**
@@ -285,7 +207,7 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      */
     public reset(): Promise<boolean> {
         return this.send(DAPCommand.DAP_RESET_TARGET)
-        .then(response => response.getUint8(2) === DAPResetTargeResponse.RESET_SEQUENCE);
+            .then(response => response.getUint8(2) === DAPResetTargeResponse.RESET_SEQUENCE);
     }
 
     /**
@@ -297,12 +219,14 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      * @returns Promise of any value read
      */
     public transfer(port: DAPPort, mode: DAPTransferMode, register: number, value?: number): Promise<number>;
+
     /**
      * Transfer data with multiple read or write operations
      * @param operations The operations to use
      * @returns Promise of any values read
      */
     public transfer(operations: DAPOperation[]): Promise<Uint32Array>;
+
     public transfer(portOrOps: DAPPort | DAPOperation[], mode: DAPTransferMode = DAPTransferMode.READ, register: number = 0, value: number = 0): Promise<number | Uint32Array> {
 
         let operations: DAPOperation[];
@@ -336,38 +260,38 @@ export class CmsisDAP extends EventEmitter implements Proxy {
         });
 
         return this.send(DAPCommand.DAP_TRANSFER, data)
-        .then(result => {
+            .then(result => {
 
-            // Transfer count
-            if (result.getUint8(1) !== operations.length) {
-                throw new Error("Transfer count mismatch");
-            }
+                // Transfer count
+                if (result.getUint8(1) !== operations.length) {
+                    throw new Error("Transfer count mismatch");
+                }
 
-            // Transfer response
-            const response = result.getUint8(2);
-            if (response === DAPTransferResponse.WAIT) {
-                throw new Error("Transfer response WAIT");
-            }
-            if (response === DAPTransferResponse.FAULT) {
-                throw new Error("Transfer response FAULT");
-            }
-            if (response === DAPTransferResponse.PROTOCOL_ERROR) {
-                throw new Error("Transfer response PROTOCOL_ERROR");
-            }
-            if (response === DAPTransferResponse.VALUE_MISMATCH) {
-                throw new Error("Transfer response VALUE_MISMATCH");
-            }
-            if (response === DAPTransferResponse.NO_ACK) {
-                throw new Error("Transfer response NO_ACK");
-            }
+                // Transfer response
+                const response = result.getUint8(2);
+                if (response === DAPTransferResponse.WAIT) {
+                    throw new Error("Transfer response WAIT");
+                }
+                if (response === DAPTransferResponse.FAULT) {
+                    throw new Error("Transfer response FAULT");
+                }
+                if (response === DAPTransferResponse.PROTOCOL_ERROR) {
+                    throw new Error("Transfer response PROTOCOL_ERROR");
+                }
+                if (response === DAPTransferResponse.VALUE_MISMATCH) {
+                    throw new Error("Transfer response VALUE_MISMATCH");
+                }
+                if (response === DAPTransferResponse.NO_ACK) {
+                    throw new Error("Transfer response NO_ACK");
+                }
 
-            if (typeof portOrOps === "number") {
-                return result.getUint32(3, true);
-            }
+                if (typeof portOrOps === "number") {
+                    return result.getUint32(3, true);
+                }
 
-            const length = operations.length * 4;
-            return new Uint32Array(result.buffer.slice(3, 3 + length));
-        });
+                const length = operations.length * 4;
+                return new Uint32Array(result.buffer.slice(3, 3 + length));
+            });
     }
 
     /**
@@ -377,6 +301,7 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      * @returns Promise of values read
      */
     public transferBlock(port: DAPPort, register: number, count: number): Promise<Uint32Array>;
+
     /**
      * Write a block of data to a single register
      * @param port Port type (debug port or access port)
@@ -385,6 +310,7 @@ export class CmsisDAP extends EventEmitter implements Proxy {
      * @returns Promise
      */
     public transferBlock(port: DAPPort, register: number, values: Uint32Array): Promise<undefined>;
+
     public transferBlock(port: DAPPort, register: number, countOrValues: number | Uint32Array): Promise<Uint32Array | undefined> {
 
         let operationCount: number;
@@ -416,33 +342,111 @@ export class CmsisDAP extends EventEmitter implements Proxy {
         }
 
         return this.send(DAPCommand.DAP_TRANSFER_BLOCK, view)
-        .then(result => {
+            .then(result => {
 
-            // Transfer count
-            if (result.getUint16(1, true) !== operationCount) {
-                throw new Error("Transfer count mismatch");
-            }
+                // Transfer count
+                if (result.getUint16(1, true) !== operationCount) {
+                    throw new Error("Transfer count mismatch");
+                }
 
-            // Transfer response
-            const response = result.getUint8(3);
-            if (response & DAPTransferResponse.WAIT) {
-                throw new Error("Transfer response WAIT");
-            }
-            if (response & DAPTransferResponse.FAULT) {
-                throw new Error("Transfer response FAULT");
-            }
-            if (response & DAPTransferResponse.PROTOCOL_ERROR) {
-                throw new Error("Transfer response PROTOCOL_ERROR");
-            }
-            if (response & DAPTransferResponse.NO_ACK) {
-                throw new Error("Transfer response NO_ACK");
-            }
+                // Transfer response
+                const response = result.getUint8(3);
+                if (response & DAPTransferResponse.WAIT) {
+                    throw new Error("Transfer response WAIT");
+                }
+                if (response & DAPTransferResponse.FAULT) {
+                    throw new Error("Transfer response FAULT");
+                }
+                if (response & DAPTransferResponse.PROTOCOL_ERROR) {
+                    throw new Error("Transfer response PROTOCOL_ERROR");
+                }
+                if (response & DAPTransferResponse.NO_ACK) {
+                    throw new Error("Transfer response NO_ACK");
+                }
 
-            if (typeof countOrValues === "number") {
-                return new Uint32Array(result.buffer.slice(4));
-            }
+                if (typeof countOrValues === "number") {
+                    return new Uint32Array(result.buffer.slice(4));
+                }
 
-            return undefined;
+                return undefined;
+            });
+    }
+
+    /**
+     * Switches the CMSIS-DAP unit to use SWD
+     * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0316d/Chdhfbhc.html
+     */
+    protected selectProtocol(protocol: DAPProtocol): Promise<void> {
+        const sequence = protocol === DAPProtocol.JTAG ? JTAG_SEQUENCE : SWD_SEQUENCE;
+
+        return this.swjSequence(new Uint8Array([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])) // Sequence of 1's
+            .then(() => this.swjSequence(new Uint16Array([sequence]))) // Send protocol sequence
+            .then(() => this.swjSequence(new Uint8Array([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]))) // Sequence of 1's
+            .then(() => this.swjSequence(new Uint8Array([0x00])));
+    }
+
+    /**
+     * Send a command
+     * @param command Command to send
+     * @param data Data to use
+     * @returns Promise of DataView
+     */
+    protected send(command: number, data?: BufferSource): Promise<DataView> {
+        const array = this.bufferSourceToUint8Array(command, data);
+
+        return this.transport.write(array)
+            .then(() => this.transport.read())
+            .then(response => {
+                if (response.getUint8(0) !== command) {
+                    throw new Error(`Bad response for ${command} -> ${response.getUint8(0)}`);
+                }
+
+                switch (command) {
+                    case DAPCommand.DAP_DISCONNECT:
+                    case DAPCommand.DAP_WRITE_ABORT:
+                    case DAPCommand.DAP_DELAY:
+                    case DAPCommand.DAP_RESET_TARGET:
+                    case DAPCommand.DAP_SWJ_CLOCK:
+                    case DAPCommand.DAP_SWJ_SEQUENCE:
+                    case DAPCommand.DAP_SWD_CONFIGURE:
+                    case DAPCommand.DAP_SWD_SEQUENCE:
+                    case DAPCommand.DAP_SWO_TRANSPORT:
+                    case DAPCommand.DAP_SWO_MODE:
+                    case DAPCommand.DAP_SWO_CONTROL:
+                    case DAPCommand.DAP_JTAG_CONFIGURE:
+                    case DAPCommand.DAP_JTAG_ID_CODE:
+                    case DAPCommand.DAP_TRANSFER_CONFIGURE:
+                        if (response.getUint8(1) !== DAPResponse.DAP_OK) {
+                            throw new Error(`Bad status for ${command} -> ${response.getUint8(1)}`);
+                        }
+                }
+
+                return response;
+            });
+    }
+
+    private delay(timeout: number): Promise<void> {
+        return new Promise((resolve, _reject) => {
+            setTimeout(resolve, timeout);
         });
+    }
+
+    private bufferSourceToUint8Array(prefix: number, data?: BufferSource): Uint8Array {
+
+        if (!data) {
+            return new Uint8Array([prefix]);
+        }
+
+        function isView(source: ArrayBuffer | ArrayBufferView): source is ArrayBufferView {
+            return (source as ArrayBufferView).buffer !== undefined;
+        }
+
+        const arrayBuffer = isView(data) ? data.buffer : data;
+        const result = new Uint8Array(arrayBuffer.byteLength + 1);
+
+        result.set([prefix]);
+        result.set(new Uint8Array(arrayBuffer), 1);
+
+        return result;
     }
 }

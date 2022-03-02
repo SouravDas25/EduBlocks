@@ -2,7 +2,6 @@
   "id": "input",
   "name": "Input and textarea",
   "affected": "input, textarea",
-  
   "summary-comment": "purposefuly empty",
   "summary": "",
   "included": true

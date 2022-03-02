@@ -28,7 +28,6 @@ A simple tab system inspired by [Components CSS Tabs](www.felipefialho.com/css-c
 </div>
 ```
 
-
 ### Gallery example
 
 Create a gallery super-easy with thumbnails as tabs:

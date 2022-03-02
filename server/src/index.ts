@@ -1,21 +1,23 @@
 import fs = require('fs');
 import path = require('path');
 import express = require('express');
+
 const expressWs = require('express-ws');
 const bodyParser = require('body-parser');
-import { initProcess } from './process';
-import { Packet } from './common/protocol';
+import {initProcess} from './process';
+import {Packet} from './common/protocol';
 
 interface EduBlocksClient {
-  pos: number;
-  sendPacket(packet: Packet): void;
+    pos: number;
+
+    sendPacket(packet: Packet): void;
 }
 
 const homeDirPath = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']!;
 const eduBlocksWorkingPath = path.join(homeDirPath, '.edublocks');
 
 if (!fs.existsSync(eduBlocksWorkingPath)) {
-  fs.mkdirSync(eduBlocksWorkingPath);
+    fs.mkdirSync(eduBlocksWorkingPath);
 }
 
 const ui = path.join(__dirname, '..', '..', 'ui');
@@ -33,7 +35,7 @@ console.log(`Scripts will be written to: ${scriptPath}`);
 const app = express();
 
 // For parsing application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 expressWs(app);
 
@@ -46,118 +48,119 @@ const clients: EduBlocksClient[] = [];
 let log = '';
 
 function clearLog() {
-  log = '';
+    log = '';
 }
 
 function writeToAllClients(data: string) {
-  log += data;
+    log += data;
 
-  clients.forEach(client => {
-    client.sendPacket({
-      packetType: 'data',
-      payload: log.substring(client.pos),
+    clients.forEach(client => {
+        client.sendPacket({
+            packetType: 'data',
+            payload: log.substring(client.pos),
+        });
+
+        client.pos = log.length;
     });
-
-    client.pos = log.length;
-  });
 }
 
 app.post('/runcode', (req, res) => {
-  clearLog();
+    clearLog();
 
-  const { code } = req.body;
+    const {code} = req.body;
 
-  const beforeScript = fs.readFileSync(beforeScriptPath);
-  const afterScript = fs.readFileSync(afterScriptPath);
+    const beforeScript = fs.readFileSync(beforeScriptPath);
+    const afterScript = fs.readFileSync(afterScriptPath);
 
-  const exec = [beforeScript, code, afterScript].join('\r\n');
+    const exec = [beforeScript, code, afterScript].join('\r\n');
 
-  fs.writeFileSync(scriptPath, exec);
+    fs.writeFileSync(scriptPath, exec);
 
-  // Used to store the previous size
-  let cols: number | null = null, rows: number | null = null;
+    // Used to store the previous size
+    let cols: number | null = null, rows: number | null = null;
 
-  // Kill the last process if it is still running...
-  if (proc) {
-    const size = proc.getSize();
+    // Kill the last process if it is still running...
+    if (proc) {
+        const size = proc.getSize();
 
-    cols = size.cols;
-    rows = size.rows;
+        cols = size.cols;
+        rows = size.rows;
 
-    proc.terminate();
-  }
+        proc.terminate();
+    }
 
-  proc = initProcess('python3', ['-u', scriptPath]);
+    proc = initProcess('python3', ['-u', scriptPath]);
 
-  if (cols && rows) {
-    proc.resize(cols, rows);
-  }
+    if (cols && rows) {
+        proc.resize(cols, rows);
+    }
 
-  proc.setOnData(writeToAllClients);
+    proc.setOnData(writeToAllClients);
 
-  res.send('Started');
+    res.send('Started');
 });
 
 app.ws('/terminal', (ws, req) => {
-  const client: EduBlocksClient = {
-    pos: 0,
+    const client: EduBlocksClient = {
+        pos: 0,
 
-    sendPacket(packet) {
-      try {
-        ws.send(JSON.stringify(packet));
-      } catch (e) { }
-    },
-  };
+        sendPacket(packet) {
+            try {
+                ws.send(JSON.stringify(packet));
+            } catch (e) {
+            }
+        },
+    };
 
-  const index = clients.push(client) - 1;
+    const index = clients.push(client) - 1;
 
-  console.log(`Successfully connected to Device ${index}`);
+    console.log(`Successfully connected to Device ${index}`);
 
-  ws.on('message', (json: string) => {
-    const packet: Packet = JSON.parse(json);
+    ws.on('message', (json: string) => {
+        const packet: Packet = JSON.parse(json);
 
-    switch (packet.packetType) {
-      case 'data':
-        proc.write(packet.payload);
+        switch (packet.packetType) {
+            case 'data':
+                proc.write(packet.payload);
 
-        break;
+                break;
 
-      case 'resize':
-        const { cols, rows } = packet.payload;
+            case 'resize':
+                const {cols, rows} = packet.payload;
 
-       // console.log(`X: ${cols} Y:${rows}`);
+                // console.log(`X: ${cols} Y:${rows}`);
 
-        if (proc) proc.resize(cols, rows);
+                if (proc) proc.resize(cols, rows);
 
-        break;
-    }
-  });
+                break;
+        }
+    });
 
-  ws.on('close', () => {
-    const index = clients.indexOf(client);
+    ws.on('close', () => {
+        const index = clients.indexOf(client);
 
-    console.log(`Device ${index} has been disconnected`);
+        console.log(`Device ${index} has been disconnected`);
 
-    clients.splice(index, 1);
-  });
+        clients.splice(index, 1);
+    });
 });
 
 app.get('/', (req, res, next) => {
-  const indexPath = path.join(ui, 'index.html');
+    const indexPath = path.join(ui, 'index.html');
 
-  const contents = fs.readFileSync(indexPath, 'utf8');
+    const contents = fs.readFileSync(indexPath, 'utf8');
 
-  const injected = contents.replace(
-    '<meta name="x-host-type" content="" />',
-    '<meta name="x-host-type" content="RaspberryPi" />',
-  );
+    const injected = contents.replace(
+        '<meta name="x-host-type" content="" />',
+        '<meta name="x-host-type" content="RaspberryPi" />',
+    );
 
-  res.status(200).send(injected);
+    res.status(200).send(injected);
 });
 
 app.use(express.static(ui));
 
 app.listen(8081, () => {
-  console.log('EduBlocks Connect now listening on port 8081!')
-  console.log('Launch http://app.edublocks.org/editor and select the "Raspberry Pi" mode to get started!')
+    console.log('EduBlocks Connect now listening on port 8081!')
+    console.log('Launch http://app.edublocks.org/editor and select the "Raspberry Pi" mode to get started!')
 });

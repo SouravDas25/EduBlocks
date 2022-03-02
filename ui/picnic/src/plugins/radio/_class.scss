@@ -10,18 +10,18 @@ $picnic-radio-border: 1px solid #aaa !default;
   width: 0;
   position: absolute;
   display: inline-block;
-  
+
   + .checkable:hover:before,
   &:focus + .checkable:before {
     border: 1px solid $picnic-primary;
-    }
-  
+  }
+
   + .checkable {
     position: relative;
     cursor: pointer;
     padding-left: $picnic-radio-size * 1.5;
     margin-right: .6em;
-        
+
     &:before,
     &:after {
       content: '';
@@ -40,15 +40,15 @@ $picnic-radio-border: 1px solid #aaa !default;
       height: $picnic-radio-size;
       border-radius: 50%;
       transition: $picnic-transition;
-      }
-
-    &:before {            
-      border: $picnic-radio-border;
-      }
     }
+
+    &:before {
+      border: $picnic-radio-border;
+    }
+  }
 
   &:checked + .checkable:after {
     background: #555;
     transform: scale(.5) translateY(-100%);
-    }
   }
+}

@@ -252,7 +252,7 @@ export const enum CSWMask {
      * Common mask value
      * @hidden
      */
-    VALUE = ( ADDRINC_SINGLE | DBGSTATUS | RESERVED | HPROT1 | MASTERTYPE ),
+    VALUE = (ADDRINC_SINGLE | DBGSTATUS | RESERVED | HPROT1 | MASTERTYPE),
 }
 
 /**

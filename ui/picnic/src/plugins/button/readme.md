@@ -20,7 +20,6 @@ They can be of different colors and types:
 </label>
 ```
 
-
 ### Pseudo buttons
 
 Allows for seemingly links to behave as buttons:
@@ -35,10 +34,10 @@ Allows for seemingly links to behave as buttons:
 </label>
 ```
 
-
 ### Hack it
 
-You only have to define a single color base for new colors. The `:hover` and `:active` status are handled as overlays for consistency and simplicity
+You only have to define a single color base for new colors. The `:hover` and `:active` status are handled as overlays
+for consistency and simplicity
 
 ```html
 <button class="myCoolButton">My Cool Button</button>
@@ -50,8 +49,8 @@ You only have to define a single color base for new colors. The `:hover` and `:a
 }
 ```
 
-
-To create a larger button you only need to make the font inside it larger. The paddings are set in *em* so the whole button stays in great shape:
+To create a larger button you only need to make the font inside it larger. The paddings are set in *em* so the whole
+button stays in great shape:
 
 ```html
 <button class="mainButton">Large button</button><br>

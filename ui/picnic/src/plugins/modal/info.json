@@ -8,5 +8,5 @@
   "summary": "A pop-up like element that displays important information and focuses user's attention on it.",
   "dependencies": [
     "card/v2"
-    ]
+  ]
 }

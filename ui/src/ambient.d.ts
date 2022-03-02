@@ -1,29 +1,32 @@
 import * as DAPjs from './lib/dapjs';
 
 declare global {
-  interface Window {
-    transport: DAPjs.WebUSB;
-    daplink: DAPjs.DAPLink;
-  }
+    interface Window {
+        transport: DAPjs.WebUSB;
+        daplink: DAPjs.DAPLink;
+    }
 
-  class Terminal {
-    constructor(args?: TermNewArgs);
+    class Terminal {
+        cols: number;
+        rows: number;
+        element: HTMLElement;
 
-    on(event: 'data', handler: (data: string) => void): void;
+        constructor(args?: TermNewArgs);
 
-    open(element: Node, focus: boolean): void;
-    fit(): void;
-    focus(): void;
-    write(text: string): void;
-    reset(): void;
+        on(event: 'data', handler: (data: string) => void): void;
 
-    cols: number;
-    rows: number;
+        open(element: Node, focus: boolean): void;
 
-    element: HTMLElement;
-  }
+        fit(): void;
 
-  interface TermNewArgs {
+        focus(): void;
 
-  }
+        write(text: string): void;
+
+        reset(): void;
+    }
+
+    interface TermNewArgs {
+
+    }
 }

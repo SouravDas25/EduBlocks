@@ -1,6 +1,7 @@
 ## Card
 
-A card is a self-contained, replicable type. It works great with other of its kind. It can consist of only one element or many of them:
+A card is a self-contained, replicable type. It works great with other of its kind. It can consist of only one element
+or many of them:
 
 ```html
 <article class="card">

@@ -9,7 +9,6 @@ A vertical group of different elements.
 <span class="button stack icon-help-circled">Test</span>
 ```
 
-
 They can also toggle:
 
 ```html
@@ -41,7 +40,6 @@ They can also toggle:
 </div>
 ```
 
-
 Stack different kind of elements
 
 ```html
@@ -70,8 +68,6 @@ Pseudo buttons:
 <a class="stack pseudo button">Second</a>
 <a class="stack pseudo button">Third</a>
 ```
-
-
 
 ### Forms
 

@@ -9,7 +9,7 @@
 /**
  * @returns An object with the fs wrapper.
  */
-var microbitFsWrapper = function() {
+var microbitFsWrapper = function () {
     var fsWrapper = {};
 
     var uPyFs = null;
@@ -34,8 +34,8 @@ var microbitFsWrapper = function() {
      * creating functions with the same name in this object.
      */
     function duplicateMethods() {
-        passthroughMethods.forEach(function(method) {
-            fsWrapper[method] = function() {
+        passthroughMethods.forEach(function (method) {
+            fsWrapper[method] = function () {
                 return uPyFs[method].apply(uPyFs, arguments);
             };
         });
@@ -45,29 +45,29 @@ var microbitFsWrapper = function() {
      * Fetches both MicroPython hexes and sets up the file system with the
      * initial main.py
      */
-    fsWrapper.setupFilesystem = function() {
+    fsWrapper.setupFilesystem = function () {
         var uPyV1 = null;
         var uPyV2 = null;
 
-        var deferred1 = $.get('micropython/microbit-micropython-v1.hex', function(fileStr) {
+        var deferred1 = $.get('micropython/microbit-micropython-v1.hex', function (fileStr) {
             uPyV1 = fileStr;
-        }).fail(function() {
+        }).fail(function () {
             console.error('Could not load the MicroPython v1 file.');
         });
-        var deferred2 = $.get('micropython/microbit-micropython-v2.hex', function(fileStr) {
+        var deferred2 = $.get('micropython/microbit-micropython-v2.hex', function (fileStr) {
             uPyV2 = fileStr;
-        }).fail(function() {
+        }).fail(function () {
             console.error('Could not load the MicroPython v2 file.');
         });
 
-        return $.when(deferred1, deferred2).done(function() {
+        return $.when(deferred1, deferred2).done(function () {
             if (!uPyV1 || !uPyV2) {
                 console.error('There was an issue loading the MicroPython Hex files.');
             }
             // TODO: We need to use ID 9901 for app compatibility, but can soon be changed to 9900 (as per spec)
             uPyFs = new microbitFs.MicropythonFsHex([
-                { hex: uPyV1, boardId: 0x9901 },
-                { hex: uPyV2, boardId: 0x9903 },
+                {hex: uPyV1, boardId: 0x9901},
+                {hex: uPyV2, boardId: 0x9903},
             ], {
                 'maxFsSize': commonFsSize,
             });
@@ -79,7 +79,7 @@ var microbitFsWrapper = function() {
      * @param {string} boardId String with the Board ID for the generation.
      * @returns Uint8Array with the data for the given Board ID.
      */
-    fsWrapper.getBytesForBoardId = function(boardId) {
+    fsWrapper.getBytesForBoardId = function (boardId) {
         if (boardId == '9900' || boardId == '9901') {
             return uPyFs.getIntelHexBytes(0x9901);
         } else if (boardId == '9903' || boardId == '9904') {
@@ -93,7 +93,7 @@ var microbitFsWrapper = function() {
      * @param {string} boardId String with the Board ID for the generation.
      * @returns ArrayBuffer with the Intel Hex data for the given Board ID.
      */
-    fsWrapper.getIntelHexForBoardId = function(boardId) {
+    fsWrapper.getIntelHexForBoardId = function (boardId) {
         if (boardId == '9900' || boardId == '9901') {
             var hexStr = uPyFs.getIntelHex(0x9901);
         } else if (boardId == '9903' || boardId == '9904') {
@@ -117,7 +117,7 @@ var microbitFsWrapper = function() {
      *     import.
      * @return {string[]} Array with the filenames of all files imported.
      */
-    fsWrapper.importHexFiles = function(hexStr) {
+    fsWrapper.importHexFiles = function (hexStr) {
         var filesNames = uPyFs.importFilesFromHex(hexStr, {
             overwrite: true,
             formatFirst: true
@@ -136,12 +136,13 @@ var microbitFsWrapper = function() {
      *     import.
      * @return {string[]} Array with the filenames of all files imported.
      */
-    fsWrapper.importHexAppended = function(hexStr) {
+    fsWrapper.importHexAppended = function (hexStr) {
         var code = microbitFs.getIntelHexAppendedScript(hexStr);
         if (!code) {
             throw new Error('No appended code found in the hex file');
-        };
-        uPyFs.ls().forEach(function(fileName) {
+        }
+
+        uPyFs.ls().forEach(function (fileName) {
             uPyFs.remove(fileName);
         });
         uPyFs.write('main.py', code);

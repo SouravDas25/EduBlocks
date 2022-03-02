@@ -2,5 +2,5 @@
 
     <label text="PiCamera" web-class="myLabelStyle"></label>
     <block type="import_picamera"></block>
-    
+
 </category>  

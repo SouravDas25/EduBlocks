@@ -5,15 +5,15 @@ function saveFile(fileName, data, ext, type) {
 
     if (ext && fileName.slice(-4) !== `.${ext}`) fileName = `${fileName}.${ext}`;
 
-    const blob = new Blob([data], { type });
+    const blob = new Blob([data], {type});
     saveAs(blob, fileName, disableAutoBOM);
     return Promise.resolve(void 0);
-  }
+}
 
 async function fsUniversalHex(code, filename) {
     var FS = microbitFsWrapper();
 
-    FS.setupFilesystem().then(function() {
+    FS.setupFilesystem().then(function () {
         FS.write('main.py', code);
         var result = FS.getUniversalHex()
         saveFile(filename, result, 'hex', 'application/octet-stream')
@@ -23,11 +23,11 @@ async function fsUniversalHex(code, filename) {
 function flashUniversalHex(code) {
     var FS = microbitFsWrapper();
 
-    FS.setupFilesystem().then(async function() {
+    FS.setupFilesystem().then(async function () {
         FS.write('main.py', code);
-        
+
         let output = FS.getUniversalHex()
-        
+
         const enc = await new TextEncoder();
         const image = await enc.encode(output).buffer;
 

@@ -19,25 +19,28 @@ nav .login {
     fill: white;
 }
 
- progress {
-	background-color: #b5b5b5;
-	border: 0;
-	width: 100%;
-	height: 18px;
-	border-radius: 9px;
-}
- progress::-webkit-progress-bar {
-	background-color: #b5b5b5;
+progress {
+    background-color: #b5b5b5;
+    border: 0;
+    width: 100%;
+    height: 18px;
     border-radius: 9px;
 }
- progress::-webkit-progress-value {
-	background: #E71D64;
-	border-radius: 9px;
-}
-.html5-progress-bar progress::-moz-progress-bar {
-	background: #E71D64;
 
-	border-radius: 9px;
+progress::-webkit-progress-bar {
+    background-color: #b5b5b5;
+    border-radius: 9px;
+}
+
+progress::-webkit-progress-value {
+    background: #E71D64;
+    border-radius: 9px;
+}
+
+.html5-progress-bar progress::-moz-progress-bar {
+    background: #E71D64;
+
+    border-radius: 9px;
 }
 
 
@@ -80,8 +83,8 @@ nav .button {
 }
 
 nav {
-    background: #1B173D; 
-   
+    background: #1B173D;
+
 }
 
 .Nav__platformImg {
@@ -106,24 +109,25 @@ nav .login {
 }
 
 @media only screen and (max-width: 600px) {
-    #filename{
+    #filename {
         display: none !important;
     }
+
     nav .login {
         width: 130px;
     }
 }
 
 @media only screen and (max-width: 400px) {
-    #loginimage{
+    #loginimage {
         display: none !important;
     }
 }
 
 @media (max-width: 80em) {
-.SelectModel__container {
-    min-width: 53%;
-}
+    .SelectModel__container {
+        min-width: 53%;
+    }
 
 }
 
@@ -202,13 +206,13 @@ nav .login img {
     color: #FFFFFF !important;
 }
 
-#ext:hover{
+#ext:hover {
     border-color: #1B173D;
     border-width: 2px;
 }
 
-.blocklyTreeIconCustom{
-    line-height: 54px !important; 
+.blocklyTreeIconCustom {
+    line-height: 54px !important;
 }
 
 nav .brand {
@@ -304,7 +308,7 @@ table.primary td {
     background: #e7e7e7;
 }
 
-.show-editor{
+.show-editor {
     display: block !important;
 }
 
@@ -373,15 +377,15 @@ a {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-  }
-  
+}
+
 .flex-container > div {
     margin: 10px;
     text-align: center;
     line-height: 75px;
     font-size: 30px;
     margin: 0 auto;
-  }
+}
 
 .card header, .modal .overlay ~ * header {
     font-weight: bold;
@@ -389,11 +393,11 @@ a {
     border-bottom: 1px solid #eee;
     background-color: #1B173D;
     color: white;
-  }
+}
 
 .modal > input:checked ~ .overlay ~ * {
     border-radius: 15px;
-   }
+}
 
 .loader {
     border: 16px solid #f3f3f3;
@@ -403,18 +407,26 @@ a {
     height: 120px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
-  }
-  
-  /* Safari */
-  @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 /* Specifying rounded toolbox borders. */
 div.blocklyTreeRow {
@@ -423,7 +435,7 @@ div.blocklyTreeRow {
 
 }
 
-button{
+button {
     background: #4455A5;
 }
 
@@ -484,14 +496,13 @@ button{
     padding-left: 20px;
 }
 
-.LoginModal__close{
-    
+.LoginModal__close {
+
     color: white;
 }
 
 
-
-.ImageHelpIconContainer{
+.ImageHelpIconContainer {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -1102,10 +1113,10 @@ library-item_featured-item_3V2-t {
 }
 
 input:-moz-placeholder {
-    box-shadow:none !important;
+    box-shadow: none !important;
 }
 
-library-item_library-item_1DcMO:hover{
+library-item_library-item_1DcMO:hover {
     border: #1B173D;
 }
 
@@ -1151,7 +1162,7 @@ library-item_library-item_1DcMO:hover{
     border: 0.25rem solid hsla(0, 0%, 0%, 0.15);
 }
 
-.ReactModal__Overlay{
+.ReactModal__Overlay {
     z-index: 20000;
 }
 

@@ -126,4 +126,4 @@ export interface DAP {
     writeBlock(register: number, values: Uint32Array): Promise<void>;
 }
 
-export { ADI } from "./adi";
+export {ADI} from "./adi";

@@ -1,14 +1,14 @@
-import { PlatformInterface } from '../../types';
+import {PlatformInterface} from '../../types';
 
 export function newWebPlatform(): PlatformInterface {
-  return {
-    key: 'Python',
-    name: 'Python 3',
-    image: '/images/webpy.png',
-    capabilities: ['TrinketShell'],
-    defaultExtensions: [
-      'Web General',
-    ],
-    extensions: [],
-  };
+    return {
+        key: 'Python',
+        name: 'Python 3',
+        image: '/images/webpy.png',
+        capabilities: ['TrinketShell'],
+        defaultExtensions: [
+            'Web General',
+        ],
+        extensions: [],
+    };
 }

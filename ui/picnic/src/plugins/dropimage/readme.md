@@ -1,6 +1,7 @@
 ## Drop image
 
-Allows you to add a file input element that can receive an image drop and clicks with native elements. However, it needs some javascript to show the dropped image:
+Allows you to add a file input element that can receive an image drop and clicks with native elements. However, it needs
+some javascript to show the dropped image:
 
 ```html
 <div style="width: 200px"> <!-- this div just for demo display -->
@@ -9,7 +10,6 @@ Allows you to add a file input element that can receive an image drop and clicks
   </label>
 </div>
 ```
-
 
 ### JavaScript
 
@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 ```
 
-
 ### Hack it
 
 Do you want round pictures? No problem, just do this:
@@ -48,8 +47,6 @@ To get this:
   <input name="filea" title="Drop image or click me" type="file">
 </label>
 ```
-
-
 
 Make it smaller
 

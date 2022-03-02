@@ -21,7 +21,7 @@
 * SOFTWARE.
 */
 
-import { DAPPort, DAPTransferMode } from "./enums";
+import {DAPPort, DAPTransferMode} from "./enums";
 
 /**
  * CMSIS-DAP Transfer Operation
@@ -118,4 +118,4 @@ export interface Proxy {
     transferBlock(port: DAPPort, register: number, values: Uint32Array): Promise<void>;
 }
 
-export { CmsisDAP } from "./cmsis-dap";
+export {CmsisDAP} from "./cmsis-dap";

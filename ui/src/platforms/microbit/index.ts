@@ -1,29 +1,29 @@
-import { PlatformInterface } from '../../types';
+import {PlatformInterface} from '../../types';
 
 export function newMicrobitPlatform(): PlatformInterface {
-  return {
-    key: 'MicroBit',
-    name: 'micro:bit',
-    image: '/images/microbit.png',
-    capabilities: ['HexDownload', 'HexFlash'], 
-    defaultExtensions: [
-      'micro:bit General',
-    ],
-    extensions: [
-      'scrollbit',
-      'GiggleBot',
-      //Automated Extensions under here
+    return {
+        key: 'MicroBit',
+        name: 'micro:bit',
+        image: '/images/microbit.png',
+        capabilities: ['HexDownload', 'HexFlash'],
+        defaultExtensions: [
+            'micro:bit General',
+        ],
+        extensions: [
+            'scrollbit',
+            'GiggleBot',
+            //Automated Extensions under here
 
-      'edubit',
+            'edubit',
 
-      'DriveBit',
+            'DriveBit',
 
-      'BitBotXL',
+            'BitBotXL',
 
-      'MoveMini',
+            'MoveMini',
 
-      'Minibit',
-      
-    ],
-  };
+            'Minibit',
+
+        ],
+    };
 }

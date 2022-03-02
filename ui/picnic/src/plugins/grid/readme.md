@@ -4,9 +4,12 @@
 
 > Note 2: the children `<span>` are only for display purposes; you can put anything you want instead of them
 
-A flexbox grid implementation with breakpoints. Choose when to change your layout depending on your content instead of the device you want to show as recommended by [Google's RWD](https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/how-to-choose-breakpoints), by [Smashing Magazine's Logical Breakpoints](https://www.smashingmagazine.com/2013/03/logical-breakpoints-responsive-design/) and Picnic CSS.
-
-
+A flexbox grid implementation with breakpoints. Choose when to change your layout depending on your content instead of
+the device you want to show as recommended
+by [Google's RWD](https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/how-to-choose-breakpoints)
+,
+by [Smashing Magazine's Logical Breakpoints](https://www.smashingmagazine.com/2013/03/logical-breakpoints-responsive-design/)
+and Picnic CSS.
 
 You can create complex, flexible layouts with it. Just resize the browser to see how powerful it is:
 
@@ -25,7 +28,6 @@ You can create complex, flexible layouts with it. Just resize the browser to see
 </div>
 ```
 
-
 ### Equally sized columns
 
 Let's start through the basics though. Just a container with equally sized children:
@@ -41,7 +43,9 @@ Let's start through the basics though. Just a container with equally sized child
 </div>
 ```
 
-With the class `flex`, smaller children will be spaced equally to fill all of the content. However, this only works with small children. If you have children bigger than their corresponding width (1/6th in the above) they will not be restricted:
+With the class `flex`, smaller children will be spaced equally to fill all of the content. However, this only works with
+small children. If you have children bigger than their corresponding width (1/6th in the above) they will not be
+restricted:
 
 ```html
 <div class="flex demo">
@@ -52,10 +56,10 @@ With the class `flex`, smaller children will be spaced equally to fill all of th
 
 To fix this, manually set the number of columns as explained in the next point.
 
-
 ### Column count
 
-If instead you prefer certain column count, such as in a gallery where it can span several rows, use a counter besides the class flex:
+If instead you prefer certain column count, such as in a gallery where it can span several rows, use a counter besides
+the class flex:
 
 ```html
 <div class="flex three demo">
@@ -67,8 +71,8 @@ If instead you prefer certain column count, such as in a gallery where it can sp
 </div>
 ```
 
-
-The columns will keep being equally spaced, but this time with the width corresponding to the column counter. You can use any number as a class from one to twelve:
+The columns will keep being equally spaced, but this time with the width corresponding to the column counter. You can
+use any number as a class from one to twelve:
 
 
 <div class="flex six">
@@ -87,13 +91,13 @@ The columns will keep being equally spaced, but this time with the width corresp
 </div>
 
 
-Most grid systems use a 12 grid system, but we wanted to use a more flexible system and allow you to choose the grid size.
-
-
+Most grid systems use a 12 grid system, but we wanted to use a more flexible system and allow you to choose the grid
+size.
 
 ### Responsive column count
 
-We follow a mobile-first design. Put the number of columns for mobile as explained in the previous point. Then, when things get too stretched, add a column counter with the number of pixels in 100 increments as follows:
+We follow a mobile-first design. Put the number of columns for mobile as explained in the previous point. Then, when
+things get too stretched, add a column counter with the number of pixels in 100 increments as follows:
 
 ```html
 <div class="flex two three-600 six-1200 demo">
@@ -106,11 +110,15 @@ We follow a mobile-first design. Put the number of columns for mobile as explain
 </div>
 ```
 
-The number after the column count as in `-600` or `-1200` are the breakpoints. When the **website width is over that number**, that column count will be used instead of the previous. If we use two or more, the largest column count will be used.
+The number after the column count as in `-600` or `-1200` are the breakpoints. When the **website width is over that
+number**, that column count will be used instead of the previous. If we use two or more, the largest column count will
+be used.
 
-For example, in a desktop with a screen of `1920x1080px` the previous one will display 6 columns. Any screen from 600px to 1200px will display three columns and smaller than 600px will display 2 columns.
+For example, in a desktop with a screen of `1920x1080px` the previous one will display 6 columns. Any screen from 600px
+to 1200px will display three columns and smaller than 600px will display 2 columns.
 
-The increment is 100px and starts in 500px up to 2000px both included. You can use any of those suffixes for the column count class:
+The increment is 100px and starts in 500px up to 2000px both included. You can use any of those suffixes for the column
+count class:
 
 <div class="flex two five-800 ten-1200">
   <div><code>-500</code></div>
@@ -130,8 +138,6 @@ The increment is 100px and starts in 500px up to 2000px both included. You can u
   <div><code>-1900</code></div>
   <div><code>-2000</code></div>
 </div>
-
-
 
 ### Remainders
 
@@ -171,11 +177,11 @@ Or you can center them:
 </div>
 ```
 
-
 ### Children sizing
 
-Now that we know how the parent (or grid) can modify itself and the elements below them, the children can also go rebel and behave on their own. Say that a child wants to be half of the size of its parent element. Easy, just add the class `half`:
-
+Now that we know how the parent (or grid) can modify itself and the elements below them, the children can also go rebel
+and behave on their own. Say that a child wants to be half of the size of its parent element. Easy, just add the
+class `half`:
 
 ```html
 <div class="flex four demo">
@@ -204,7 +210,6 @@ We have many classes like those. They are the size relative to the parent grid:
 
 The class `none` hides the element, useful for responsive layouts
 
-
 ### Responsive children
 
 They can also be fine-tuned in a way similar to the above:
@@ -219,7 +224,8 @@ They can also be fine-tuned in a way similar to the above:
 
 ### Offsets
 
-The children can also have one offset (empty space) before it. They are built adding the class off-SIZE, similar to the size but prefixing off-:
+The children can also have one offset (empty space) before it. They are built adding the class off-SIZE, similar to the
+size but prefixing off-:
 
 ```html
 <div class="flex four demo">
@@ -247,8 +253,6 @@ We have many classes like those. They are the size of the offset relative to the
 
 > Note: `offset-none` is useful for making responsive layouts as explained in the next point.
 
-
-
 ### Responsive offsets
 
 They can also have the minimum screen size when they start working:
@@ -261,4 +265,5 @@ They can also have the minimum screen size when they start working:
 </div>
 ```
 
-The main difference with the width classes is that it includes a none in case you want to hide the offset at certain sizes and that it doesn't include a full
+The main difference with the width classes is that it includes a none in case you want to hide the offset at certain
+sizes and that it doesn't include a full

@@ -6,5 +6,5 @@
   "summary": "The classical checkbox revisited for bigger and coherent shape.",
   "dependencies": [
     "radiocheckbox/v2"
-    ]
+  ]
 }

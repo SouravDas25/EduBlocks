@@ -8,7 +8,6 @@ Hover this element to show the tooltip:
 </button>
 ```
 
-
 ### Positions
 
 ```html

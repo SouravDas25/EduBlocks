@@ -21,7 +21,7 @@
 * SOFTWARE.
 */
 
-import { Transport } from "./";
+import {Transport} from "./";
 
 /**
  * @hidden
@@ -55,8 +55,8 @@ const IN_REPORT = 0x100;
  */
 export class WebUSB implements Transport {
 
-    private interfaceNumber?: number;
     public readonly packetSize = 64;
+    private interfaceNumber?: number;
 
     /**
      * WebUSB constructor
@@ -67,39 +67,25 @@ export class WebUSB implements Transport {
     constructor(private device: USBDevice, private interfaceClass = DEFAULT_CLASS, private configuration = DEFAULT_CONFIGURATION) {
     }
 
-    private extendBuffer(data: BufferSource, packetSize: number): BufferSource {
-        function isView(source: ArrayBuffer | ArrayBufferView): source is ArrayBufferView {
-            return (source as ArrayBufferView).buffer !== undefined;
-        }
-
-        const arrayBuffer = isView(data) ? data.buffer : data;
-        const length = Math.min(arrayBuffer.byteLength, packetSize);
-
-        const result = new Uint8Array(length);
-        result.set(new Uint8Array(arrayBuffer));
-
-        return result;
-    }
-
     /**
      * Open device
      * @returns Promise
      */
     public open(): Promise<void> {
         return this.device.open()
-        .then(() => this.device.selectConfiguration(this.configuration))
-        .then(() => {
-            const interfaces = this.device.configuration!.interfaces.filter(iface => {
-                return iface.alternates[0].interfaceClass === this.interfaceClass;
+            .then(() => this.device.selectConfiguration(this.configuration))
+            .then(() => {
+                const interfaces = this.device.configuration!.interfaces.filter(iface => {
+                    return iface.alternates[0].interfaceClass === this.interfaceClass;
+                });
+
+                if (!interfaces.length) {
+                    throw new Error("No valid interfaces found.");
+                }
+
+                this.interfaceNumber = interfaces[0].interfaceNumber;
+                return this.device.claimInterface(this.interfaceNumber);
             });
-
-            if (!interfaces.length) {
-                throw new Error("No valid interfaces found.");
-            }
-
-            this.interfaceNumber = interfaces[0].interfaceNumber;
-            return this.device.claimInterface(this.interfaceNumber);
-        });
     }
 
     /**
@@ -127,7 +113,7 @@ export class WebUSB implements Transport {
             },
             this.packetSize
         )
-        .then(result => result.data!);
+            .then(result => result.data!);
     }
 
     /**
@@ -150,6 +136,20 @@ export class WebUSB implements Transport {
             },
             buffer
         )
-        .then(() => undefined);
+            .then(() => undefined);
+    }
+
+    private extendBuffer(data: BufferSource, packetSize: number): BufferSource {
+        function isView(source: ArrayBuffer | ArrayBufferView): source is ArrayBufferView {
+            return (source as ArrayBufferView).buffer !== undefined;
+        }
+
+        const arrayBuffer = isView(data) ? data.buffer : data;
+        const length = Math.min(arrayBuffer.byteLength, packetSize);
+
+        const result = new Uint8Array(length);
+        result.set(new Uint8Array(arrayBuffer));
+
+        return result;
     }
 }

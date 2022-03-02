@@ -1,97 +1,99 @@
-import { Packet } from './common/protocol';
-import { initSocket } from './socket';
+import {Packet} from './common/protocol';
+import {initSocket} from './socket';
 
 interface Events {
-  open: () => void;
-  data: (data: string) => void;
-  reconnect: () => void;
+    open: () => void;
+    data: (data: string) => void;
+    reconnect: () => void;
 }
 
 export interface ServerConnection {
-  runCode(python: string): void;
-  sendData(data: string): void;
-  resizeTerminal(cols: number, rows: number): void;
+    runCode(python: string): void;
 
-  on<K extends keyof Events>(eventType: K, handler: Events[K]): void;
+    sendData(data: string): void;
+
+    resizeTerminal(cols: number, rows: number): void;
+
+    on<K extends keyof Events>(eventType: K, handler: Events[K]): void;
 }
 
 const stub = () => void 0;
 
 export async function newServerConnection(ip: string | null): Promise<ServerConnection> {
-  const eventHandlers: Events = {
-    open: stub,
-    data: stub,
-    reconnect: stub,
-  };
-
-  const url = `ws://${getHost()}/terminal`;
-
-  const ws = await initSocket(url);
-
-  ws.on('data', (packet: Packet) => {
-    switch (packet.packetType) {
-      case 'data':
-        eventHandlers.data(packet.payload);
-        break;
-    }
-  });
-
-  ws.on('reconnect', () => eventHandlers.reconnect());
-
-  function runCode(python: string) {
-    const url = `http://${getHost()}/runcode`;
-
-    console.time('runCode');
-
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.send('code=' + encodeURIComponent(python));
-
-    xhr.onload = (e) => {
-      console.timeEnd('runCode');
+    const eventHandlers: Events = {
+        open: stub,
+        data: stub,
+        reconnect: stub,
     };
-  }
 
-  function getHost() {
-    if (ip) {
-      return `${ip}:8081`;
-    }
+    const url = `ws://${getHost()}/terminal`;
 
-    if (location.protocol === 'file:') {
-      return '127.0.0.1:8081';
-    }
+    const ws = await initSocket(url);
 
-    if (location.protocol === 'http:') {
-      return location.host;
-    }
-
-    return '';
-  }
-
-  function sendData(data: string) {
-    ws.sendPacket({
-      packetType: 'data',
-      payload: data,
+    ws.on('data', (packet: Packet) => {
+        switch (packet.packetType) {
+            case 'data':
+                eventHandlers.data(packet.payload);
+                break;
+        }
     });
-  }
 
-  function resizeTerminal(cols: number, rows: number) {
-    ws.sendPacket({
-      packetType: 'resize',
-      payload: { cols, rows },
-    });
-  }
+    ws.on('reconnect', () => eventHandlers.reconnect());
 
-  function on<K extends keyof Events>(eventType: K, handler: Events[K]) {
-    eventHandlers[eventType] = handler;
-  }
+    function runCode(python: string) {
+        const url = `http://${getHost()}/runcode`;
 
-  return {
-    runCode,
-    sendData,
-    resizeTerminal,
-    on,
-  };
+        console.time('runCode');
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send('code=' + encodeURIComponent(python));
+
+        xhr.onload = (e) => {
+            console.timeEnd('runCode');
+        };
+    }
+
+    function getHost() {
+        if (ip) {
+            return `${ip}:8081`;
+        }
+
+        if (location.protocol === 'file:') {
+            return '127.0.0.1:8081';
+        }
+
+        if (location.protocol === 'http:') {
+            return location.host;
+        }
+
+        return '';
+    }
+
+    function sendData(data: string) {
+        ws.sendPacket({
+            packetType: 'data',
+            payload: data,
+        });
+    }
+
+    function resizeTerminal(cols: number, rows: number) {
+        ws.sendPacket({
+            packetType: 'resize',
+            payload: {cols, rows},
+        });
+    }
+
+    function on<K extends keyof Events>(eventType: K, handler: Events[K]) {
+        eventHandlers[eventType] = handler;
+    }
+
+    return {
+        runCode,
+        sendData,
+        resizeTerminal,
+        on,
+    };
 }

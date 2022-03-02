@@ -2,7 +2,6 @@
 // This class defines a clickable element that looks like a label
 
 
-
 // Variables
 $picnic-button-margin: $picnic-separation / 2 0 !default;
 $picnic-button-padding: $picnic-label-padding !default;
@@ -11,7 +10,6 @@ $picnic-button-click: inset 0 0 0 99em rgba($picnic-black, $picnic-transparency)
 $picnic-button-pseudo-hover: inset 0 0 0 99em rgba($picnic-black, $picnic-transparency / 2) !default;
 $picnic-button-transition: $picnic-transition !default;
 $picnic-button-radius: $picnic-label-radius !default;
-
 
 
 // Definition
@@ -34,25 +32,25 @@ $picnic-button-radius: $picnic-label-radius !default;
   &:focus {
     box-shadow: $picnic-button-hover;
     border: 0;
-    }
+  }
 
   &.pseudo:hover,
   &.pseudo:focus {
     box-shadow: $picnic-button-pseudo-hover;
-    }
+  }
 
   &.active,
   &:active,
   &.pseudo:active {
     box-shadow: $picnic-button-click;
-    }
+  }
 
   &[disabled] {
     cursor: default;
     box-shadow: none;
     background: #bbb;
-    }
   }
+}
 
 
 // // Note: If you try to do this there's a selector explossion:
