@@ -158,7 +158,22 @@ app.get('/', (req, res, next) => {
     res.status(200).send(injected);
 });
 
+app.use(bodyParser.text());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(express.static(ui));
+
+app.post('/file-upload', function(req, res) {
+    const body = req.body
+    const name = req.query["file-name"];
+    const target_path = './public/files/' + name;
+    fs.writeFileSync(target_path, body, "UTF-8");
+    res.send(name + " File Saved.")
+});
+
+const uploads = path.join(__dirname, '..', 'public');
+
+app.use(express.static(uploads));
 
 app.listen(8081, () => {
     console.log('EduBlocks Connect now listening on port 8081!')

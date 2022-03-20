@@ -625,8 +625,32 @@ export default class Page extends Component<Props, State> {
             });
 
         } else {
-            const xml = await this.props.app.openFile();
-            this.readBlocklyContents(xml);
+            console.log(this.state.fileName);
+
+            if (this.state.fileName.trim().length > 0) {
+
+                let fileName = this.state.fileName.trim()
+
+                if (fileName.indexOf(".xml") == -1) {
+                    fileName = fileName + ".xml";
+                }
+
+                console.log(fileName);
+
+                const requestOptions: RequestInit = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+
+                const response = await fetch("http://localhost:8081/files/" + fileName, requestOptions);
+                if (response.status == 200) {
+                    const xml = await response.text();
+                    this.readBlocklyContents(xml);
+                }
+
+            }
+
+            console.log("File Loaded");
         }
     }
 
@@ -913,7 +937,30 @@ export default class Page extends Component<Props, State> {
                         self.closeModal();
                     });
                 } else {
-                    await this.props.app.saveFile(this.state.fileName, xml, 'xml', 'text/xml;charset=utf-8');
+
+                    console.log(this.state.fileName);
+                    const myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "text/plain");
+                    const requestOptions: RequestInit = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: xml,
+                        redirect: 'follow'
+                    };
+                    let fileName = "apple.xml";
+                    if (this.state.fileName.trim().length <= 0) {
+                        fileName = this.state.fileName;
+                    }
+
+                    if (fileName.indexOf(".xml") == -1) {
+                        fileName = fileName + ".xml";
+                    }
+
+                    const response = await fetch("http://localhost:8081/file-upload?file-name=" + fileName, requestOptions);
+                    console.log(await response.text());
+                    alert("file saved");
+
+
                 }
             }
         }
@@ -1046,9 +1093,7 @@ export default class Page extends Component<Props, State> {
 
     private hasCapability(capability: Capability) {
         if (!this.state.platform) return false;
-
         return this.state.platform.capabilities.indexOf(capability) !== -1;
-
     }
 
     private getExtensions() {

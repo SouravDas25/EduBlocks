@@ -1,0 +1,80 @@
+<category name="Nodes" colour="#ff0066" iconclass="blocklyTreeIconCustom imports">
+
+    <label text="Nodes" web-class="myLabelStyle"></label>
+
+    <block type="mapping"></block>
+    <block type="source"></block>
+    <block type="output"></block>
+
+    <block type="csv">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+        <value name="VALUE">
+            <shadow type="textinline">
+                <field name="text">file</field>
+            </shadow>
+        </value>
+    </block>
+
+    <block type="element">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="list">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="list_group">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+        <value name="GROUP">
+            <shadow type="textinline">
+                <field name="text">group</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="field">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+        <value name="VALUE">
+            <shadow type="textinline">
+                <field name="text">value</field>
+            </shadow>
+        </value>
+    </block>
+
+    <block type="field_agg">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+        <value name="VALUE">
+            <shadow type="textinline">
+                <field name="text">value</field>
+            </shadow>
+        </value>
+        <value name="AGG">
+            <shadow type="textinline">
+                <field name="text">aggregation</field>
+            </shadow>
+        </value>
+    </block>
+
+
+</category>

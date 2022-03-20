@@ -33,7 +33,7 @@ export default class PythonView extends Component<PythonViewProps, {}> {
         this.editor = ace.edit(this.editorDiv);
 
         this.editor.setTheme('ace/theme/monokai');
-        this.editor.getSession().setMode('ace/mode/python');
+        this.editor.getSession().setMode('ace/mode/xml');
         this.editor.setOptions({
             fontSize: "16pt"
         });

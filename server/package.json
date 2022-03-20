@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc && node build/index.js",
     "lint": "tslint src/**/*.ts",
-    "start": "node build/index.js"
+    "start": "tsc && node build/index.js"
   },
   "author": "",
   "license": "ISC",

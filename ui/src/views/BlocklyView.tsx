@@ -104,7 +104,6 @@ export default class BlocklyView extends Component<BlocklyViewProps, {}> {
         if (!this.workspace) {
             throw new Error('No workspace!');
         }
-
         return Blockly.Python.workspaceToCode(this.workspace);
     }
 

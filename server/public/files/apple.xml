@@ -1,0 +1,179 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="mapping" id="4Ym.w$`Dum=GBgDm|*N8" x="171" y="64">
+    <statement name="DO">
+      <block type="mapping" id="B}.1q^VW8aGUZ~KH/b7v">
+        <statement name="DO">
+          <block type="source" id="sVEA-[l7hqUz96OS{)OM">
+            <statement name="DO">
+              <block type="csv" id="Muqu+`Vw@4@D/y%A,Gg%">
+                <value name="NAME">
+                  <shadow type="textinline" id="S%lpwbrlugBcDNXi$T43">
+                    <field name="text">ds1</field>
+                  </shadow>
+                </value>
+                <value name="VALUE">
+                  <shadow type="textinline" id="nk1S4[640Nry;7;M{P+O">
+                    <field name="text">russia/data.csv</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="output" id="/.oU;rEDE+Ppzz+_WEY|">
+                <statement name="DO">
+                  <block type="element" id=":/XXd+JBL8T!Pggsv;wK">
+                    <value name="NAME">
+                      <shadow type="textinline" id="10e^$^dk?X8Ons/GuZS]">
+                        <field name="text">File</field>
+                      </shadow>
+                    </value>
+                    <statement name="DO">
+                      <block type="element" id=".I;*QV+Z:C`adF]!`mPq">
+                        <value name="NAME">
+                          <shadow type="textinline" id="_^/*B(:rfGptx,!Lld?C">
+                            <field name="text">Document</field>
+                          </shadow>
+                        </value>
+                        <statement name="DO">
+                          <block type="field" id="wV8a}S^aRJ(9(.fGq+yK">
+                            <value name="NAME">
+                              <shadow type="textinline" id="]CWJyq`pIM#}gpbn-Dyx">
+                                <field name="text">Vers</field>
+                              </shadow>
+                            </value>
+                            <value name="VALUE">
+                              <shadow type="textinline" id="W_UXQC{8VQpUvaw,/`w`">
+                                <field name="text">100</field>
+                              </shadow>
+                            </value>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="list_group" id="g/iR;BMj-hK-CRVaQS%W">
+                            <value name="NAME">
+                              <shadow type="textinline" id="Qokn[IKQp?-D`c,B~-dw">
+                                <field name="text">OpcodeTable</field>
+                              </shadow>
+                            </value>
+                            <value name="GROUP">
+                              <shadow type="textinline" id=")ES@|?uQ{CAR[PhwI{kc">
+                                <field name="text">{{ OPCODE }}</field>
+                              </shadow>
+                            </value>
+                            <statement name="DO">
+                              <block type="field" id="HG)4gf1_uT$h(hb#w~@G">
+                                <value name="NAME">
+                                  <shadow type="textinline" id="ROp,B2J#}Pnw.?pGEc3N">
+                                    <field name="text">OPCODE</field>
+                                  </shadow>
+                                </value>
+                                <value name="VALUE">
+                                  <shadow type="textinline" id="rsIfLe*-Yzf]Z)$w,vp1">
+                                    <field name="text">{{ OPCODE }}</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="field_agg" id="hw=./uWNMFC3qn);V{(Z">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="TO-Sx5w,*}AvVk6Re3Vl">
+                                        <field name="text">AMOUNT</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="VALUE">
+                                      <shadow type="textinline" id="*X9iI+!tJaIO`KabwTfn">
+                                        <field name="text">{{ TAXBASEAMOUNTINCOCODECRCY }}</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="AGG">
+                                      <shadow type="textinline" id="CMBu`ivY1B9(Qev)8|D3">
+                                        <field name="text">sum</field>
+                                      </shadow>
+                                    </value>
+                                    <next>
+                                      <block type="list_group" id="e*Xd51I_B#p,kb5KQYaW">
+                                        <value name="NAME">
+                                          <shadow type="textinline" id="1d~4inb`d!gZ}[rm2qCF">
+                                            <field name="text">Body</field>
+                                          </shadow>
+                                        </value>
+                                        <value name="GROUP">
+                                          <shadow type="textinline" id="@*[JaBl-F@KFazy=MmA?">
+                                            <field name="text">{{ CCDEXT_NUM }}</field>
+                                          </shadow>
+                                        </value>
+                                        <statement name="DO">
+                                          <block type="field" id="O:z!nWw;NL)D|t]NwRX@">
+                                            <value name="NAME">
+                                              <shadow type="textinline" id="P,!PQh,(^S{a7.!;2.dp">
+                                                <field name="text">CCDEXT_NUM</field>
+                                              </shadow>
+                                            </value>
+                                            <value name="VALUE">
+                                              <shadow type="textinline" id="6/r,rc84R.ZtWf-DOuGP">
+                                                <field name="text">{{ CCDEXT_NUM }}</field>
+                                              </shadow>
+                                            </value>
+                                            <next>
+                                              <block type="field" id="IHZ=Ln2I#{1UhyF/-wT2">
+                                                <value name="NAME">
+                                                  <shadow type="textinline" id="BZ:|,SP9Gr`Dg5{W4@-`">
+                                                    <field name="text">AMOUNT</field>
+                                                  </shadow>
+                                                </value>
+                                                <value name="VALUE">
+                                                  <shadow type="textinline" id="[7=`Rt10Vj94F/Ma7%)?">
+                                                    <field name="text">{{ TAXBASEAMOUNTINCOCODECRCY }}</field>
+                                                  </shadow>
+                                                </value>
+                                                <next>
+                                                  <block type="list_group" id="S%/JP_sYne#7U%0ri^_1">
+                                                    <value name="NAME">
+                                                      <shadow type="textinline" id="8!83q6Ya(/]bP/j)_-=%">
+                                                        <field name="text">TRANSPORTATIONTYPE</field>
+                                                      </shadow>
+                                                    </value>
+                                                    <value name="GROUP">
+                                                      <shadow type="textinline" id=".]*U/!:5j/Li3:)f=bmr">
+                                                        <field name="text">{{ RU_TRANSPORTATIONTYPE }}</field>
+                                                      </shadow>
+                                                    </value>
+                                                    <statement name="DO">
+                                                      <block type="field" id="Itw1}q}9XgrBViYHhUFd">
+                                                        <value name="NAME">
+                                                          <shadow type="textinline" id="!9P*KL(Z_MkWhMK1kBK!">
+                                                            <field name="text">TRANSACTION</field>
+                                                          </shadow>
+                                                        </value>
+                                                        <value name="VALUE">
+                                                          <shadow type="textinline" id="p#36))6%%G.S#@Qm!ag[">
+                                                            <field name="text">{{ RU_TRANSPORTATIONTYPE }}</field>
+                                                          </shadow>
+                                                        </value>
+                                                      </block>
+                                                    </statement>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </statement>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

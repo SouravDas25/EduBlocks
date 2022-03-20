@@ -8,6 +8,11 @@ export async function getToolBoxXml(extensions: Extension[]) {
     toolBoxXml += '<xml>';
 
     if (extensions.indexOf('Web General') !== -1) {
+
+        (await import('./web/nodes/definitions')).default(Blockly.Blocks);
+        (await import('./web/nodes/generators')).default(Blockly.Python as any);
+        toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'nodes', 'toolbox.xml'));
+
         (await import('./web/imports/definitions')).default(Blockly.Blocks);
         (await import('./web/imports/generators')).default(Blockly.Python as any);
         toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'imports', 'toolbox.xml'));
@@ -40,21 +45,21 @@ export async function getToolBoxXml(extensions: Extension[]) {
         (await import('./web/math/generators')).default(Blockly.Python as any);
         toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'math', 'toolbox.xml'));
 
-        (await import('./web/turtle/definitions')).default(Blockly.Blocks);
-        (await import('./web/turtle/generators')).default(Blockly.Python as any);
-        toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'turtle', 'toolbox.xml'));
-
-        (await import('./web/graphs/definitions')).default(Blockly.Blocks);
-        (await import('./web/graphs/generators')).default(Blockly.Python as any);
-        toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'graphs', 'toolbox.xml'));
-
-        (await import('./web/random/definitions')).default(Blockly.Blocks);
-        (await import('./web/random/generators')).default(Blockly.Python as any);
-        toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'random', 'toolbox.xml'));
-
-        (await import('./web/processing/definitions')).default(Blockly.Blocks);
-        (await import('./web/processing/generators')).default(Blockly.Python as any);
-        toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'processing', 'toolbox.xml'));
+        // (await import('./web/turtle/definitions')).default(Blockly.Blocks);
+        // (await import('./web/turtle/generators')).default(Blockly.Python as any);
+        // toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'turtle', 'toolbox.xml'));
+        //
+        // (await import('./web/graphs/definitions')).default(Blockly.Blocks);
+        // (await import('./web/graphs/generators')).default(Blockly.Python as any);
+        // toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'graphs', 'toolbox.xml'));
+        //
+        // (await import('./web/random/definitions')).default(Blockly.Blocks);
+        // (await import('./web/random/generators')).default(Blockly.Python as any);
+        // toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'random', 'toolbox.xml'));
+        //
+        // (await import('./web/processing/definitions')).default(Blockly.Blocks);
+        // (await import('./web/processing/generators')).default(Blockly.Python as any);
+        // toolBoxXml += fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'blocks', 'web', 'processing', 'toolbox.xml'));
 
     }
 
