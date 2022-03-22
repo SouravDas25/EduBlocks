@@ -1,0 +1,205 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="generation" id="60R_l-7n+x5u0}qT+OkP" x="351" y="124">
+    <statement name="DO">
+      <block type="mapping" id="*-rAqDZ0jcbo,R4JNiKC">
+        <statement name="DO">
+          <block type="source" id="Eb$]9JuQQdW;?U=rcjnV">
+            <statement name="DO">
+              <block type="csv" id="}YBs1L3N3]t[#Eqc}S5s">
+                <value name="NAME">
+                  <shadow type="textinline" id="f]70Z^~xebcoQ%~~)nI3">
+                    <field name="text">emf</field>
+                  </shadow>
+                </value>
+                <value name="VALUE">
+                  <shadow type="textinline" id="jJ#gk+$mGZWgY?y{w2Y2">
+                    <field name="text">emf/data.csv</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="output" id="wX,%,-qwf8]]-;8c]Vog">
+                <statement name="DO">
+                  <block type="element" id="ef_;?Ur4`Yf##dbZiDO4">
+                    <value name="NAME">
+                      <shadow type="textinline" id="+2:Bpry}dAm_XbY*n6sq">
+                        <field name="text">PackagingPortfolio</field>
+                      </shadow>
+                    </value>
+                    <statement name="DO">
+                      <block type="list_manual" id="^Ot(Q{!0|b|S49eLnEw-">
+                        <value name="NAME">
+                          <shadow type="textinline" id="LNhO;;IzR}f*X]*1y(dt">
+                            <field name="text">ApplicationElectronics</field>
+                          </shadow>
+                        </value>
+                        <statement name="DO">
+                          <block type="row" id="6^:E-uFd/hfP,X;ZFt][">
+                            <value name="NAME">
+                              <shadow type="textinline" id="+S=J?PRbJG!)GvGb-~%B">
+                                <field name="text">1</field>
+                              </shadow>
+                            </value>
+                            <statement name="DO">
+                              <block type="field" id="5/0.e]^x)Q`d.U@w`*a)">
+                                <value name="NAME">
+                                  <shadow type="textinline" id="uwi5^IQIBo::JL6DHq+/">
+                                    <field name="text">PackageCategories</field>
+                                  </shadow>
+                                </value>
+                                <value name="VALUE">
+                                  <shadow type="textinline" id="USi)KtC}hD!FQN7r=e6~">
+                                    <field name="text">PackageCategories</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="field" id="_q81?A%}P|Wh?z;Qiv,_">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="TUa2AX*jZjB`_c_M![=5">
+                                        <field name="text">Proportion</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="VALUE">
+                                      <shadow type="textinline" id="VCVn:a1cilt56l7#arzX">
+                                        <field name="text">{{ PET_BOTTLES }}</field>
+                                      </shadow>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="row" id="F$k3g(mZ=mjU]T1RiJKu">
+                                <value name="NAME">
+                                  <shadow type="textinline" id="/+~RsJ8h3}LOou[hA=eK">
+                                    <field name="text">2</field>
+                                  </shadow>
+                                </value>
+                                <statement name="DO">
+                                  <block type="field" id="siJ-C_XPnK.lCR9?Mj^=">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="ChhC:td.+k*/y[~jnc~O">
+                                        <field name="text">PackageCategories</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="VALUE">
+                                      <shadow type="textinline" id="cixI*{suS-,waqXH)#,T">
+                                        <field name="text">SOME_OTHER_PRODUCT</field>
+                                      </shadow>
+                                    </value>
+                                    <next>
+                                      <block type="field" id="hp%RYSRlsL,,ZnueS,qG">
+                                        <value name="NAME">
+                                          <shadow type="textinline" id="-=#9Wanbqta;-+y@v,!U">
+                                            <field name="text">Proportion</field>
+                                          </shadow>
+                                        </value>
+                                        <value name="VALUE">
+                                          <shadow type="textinline" id="dfpUPDe}*Y*+sg_d1(p)">
+                                            <field name="text">{{ SOME_OTHER_PRODUCT }}</field>
+                                          </shadow>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </statement>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="list_manual" id="~*lZS`Sy[faqDb:}Oon}">
+                            <value name="NAME">
+                              <shadow type="textinline" id="F[;K)g79FZW=oThL)*75">
+                                <field name="text">PlasticPackaging</field>
+                              </shadow>
+                            </value>
+                            <statement name="DO">
+                              <block type="row" id="/@bdz}1{=2n7xr.Kp45t">
+                                <value name="NAME">
+                                  <shadow type="textinline" id="zYjTA;VlLy0?EX#XDJf!">
+                                    <field name="text">1</field>
+                                  </shadow>
+                                </value>
+                                <statement name="DO">
+                                  <block type="field" id="utxnjdhK|k1)^oxW6#_V">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="zZFI,X]5EQEW$JSJD;2u">
+                                        <field name="text">PackageCategories</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="VALUE">
+                                      <shadow type="textinline" id="+HJDbsQY+Kktoc8}3Rs}">
+                                        <field name="text">THERMOPHOMES</field>
+                                      </shadow>
+                                    </value>
+                                    <next>
+                                      <block type="field" id="CV$g#(5WIksIiR]Z^{^_">
+                                        <value name="NAME">
+                                          <shadow type="textinline" id="_[(WG4A?,ooa3vu:at}K">
+                                            <field name="text">Proportion</field>
+                                          </shadow>
+                                        </value>
+                                        <value name="VALUE">
+                                          <shadow type="textinline" id="=h^t_B]^E;1Uu52s!SvV">
+                                            <field name="text">{{ THERMOPHOMES }}</field>
+                                          </shadow>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="row" id="2^idxAh%3*YMgrMuXf|/">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="3lQS32I/T!@.Pc]eH;G^">
+                                        <field name="text">2</field>
+                                      </shadow>
+                                    </value>
+                                    <statement name="DO">
+                                      <block type="field" id="!g`jVt3VV1_1;r2xz0]a">
+                                        <value name="NAME">
+                                          <shadow type="textinline" id="D1g7dqV,bV3.86xU;#[0">
+                                            <field name="text">PackageCategories</field>
+                                          </shadow>
+                                        </value>
+                                        <value name="VALUE">
+                                          <shadow type="textinline" id="X/9{zJbIlGg4o1wkK.7x">
+                                            <field name="text">ITEM_YHO</field>
+                                          </shadow>
+                                        </value>
+                                        <next>
+                                          <block type="field" id="=#e6v`+bY{{xeI.;AhCt">
+                                            <value name="NAME">
+                                              <shadow type="textinline" id="]VR~dUC|,dVxh+V~^%EK">
+                                                <field name="text">Proportion</field>
+                                              </shadow>
+                                            </value>
+                                            <value name="VALUE">
+                                              <shadow type="textinline" id="(q([qC86m%%a+P6r%)vZ">
+                                                <field name="text">{{ ITEM_YHO }}</field>
+                                              </shadow>
+                                            </value>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </statement>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

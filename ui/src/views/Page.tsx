@@ -143,6 +143,8 @@ export default class Page extends Component<Props, State> {
 
         var locURL = window.location.href.toString();
 
+        this.selectPlatform("Python");
+
         if (window.location.hash) {
             const platformKey = window.location.hash.slice(1) as unknown as Platform;
             this.selectPlatform(platformKey);
@@ -947,8 +949,8 @@ export default class Page extends Component<Props, State> {
                         body: xml,
                         redirect: 'follow'
                     };
-                    let fileName = "apple.xml";
-                    if (this.state.fileName.trim().length <= 0) {
+                    let fileName = "";
+                    if (this.state.fileName.trim().length > 0) {
                         fileName = this.state.fileName;
                     }
 

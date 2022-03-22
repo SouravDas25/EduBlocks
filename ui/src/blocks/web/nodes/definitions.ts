@@ -1,6 +1,20 @@
 export default function define(Blocks: Blockly.BlockDefinitions) {
 
 
+    Blockly.Blocks['generation'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("Generation");
+            this.appendStatementInput("DO")
+                .setCheck(null);
+            this.setColour('#712cb2');
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setTooltip("");
+            this.setHelpUrl("");
+        }
+    };
+
     Blockly.Blocks['mapping'] = {
         init: function () {
             this.appendDummyInput()
@@ -77,6 +91,26 @@ export default function define(Blocks: Blockly.BlockDefinitions) {
         }
     };
 
+    Blockly.Blocks['element_agg'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("element");
+            this.appendValueInput("NAME")
+                .setCheck(null);
+            this.appendDummyInput()
+                .appendField("agg");
+            this.appendValueInput("AGG")
+                .setCheck(null);
+            this.appendStatementInput("DO")
+                .setCheck(null);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(300);
+            this.setTooltip("");
+            this.setHelpUrl("");
+        }
+    };
+
     Blockly.Blocks['list'] = {
         init: function () {
             this.appendDummyInput()
@@ -102,6 +136,40 @@ export default function define(Blocks: Blockly.BlockDefinitions) {
             this.appendDummyInput()
                 .appendField("groupBy");
             this.appendValueInput("GROUP")
+                .setCheck(null);
+            this.appendStatementInput("DO")
+                .setCheck(null);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(300);
+            this.setTooltip("");
+            this.setHelpUrl("");
+        }
+    };
+
+    Blockly.Blocks['list_manual'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("list");
+            this.appendValueInput("NAME")
+                .setCheck(null);
+            this.appendDummyInput()
+                .appendField("manual");
+            this.appendStatementInput("DO")
+                .setCheck(null);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(300);
+            this.setTooltip("");
+            this.setHelpUrl("");
+        }
+    };
+
+    Blockly.Blocks['row'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("row");
+            this.appendValueInput("NAME")
                 .setCheck(null);
             this.appendStatementInput("DO")
                 .setCheck(null);

@@ -1,0 +1,104 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="generation" id="QZ+MR^U66b,LaQ5[5zr(" x="512" y="132">
+    <statement name="DO">
+      <block type="mapping" id="PCKt!@mxG=yCzQ$`k9L{">
+        <statement name="DO">
+          <block type="source" id="YM76QKJ/ucKnb)U_SvN~">
+            <statement name="DO">
+              <block type="csv" id=":{|ysI+Xhoy90`cZ%P%)">
+                <value name="NAME">
+                  <shadow type="textinline" id="f;r(8M0$K0%5.s5PVJDD">
+                    <field name="text">fr</field>
+                  </shadow>
+                </value>
+                <value name="VALUE">
+                  <shadow type="textinline" id="00pQl-`J]urGddK7Vn[;">
+                    <field name="text">fr/data.csv</field>
+                  </shadow>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="output" id=")RtIMU_:+CrzB*sQ$g[M">
+                <statement name="DO">
+                  <block type="element" id="L$V:3NMA5435l,B}o7Jw">
+                    <value name="NAME">
+                      <shadow type="textinline" id=":zs`tWq?5m0;QxHq.i,3">
+                        <field name="text">FILE</field>
+                      </shadow>
+                    </value>
+                    <statement name="DO">
+                      <block type="list" id="TZv=K]FI7A^D:1[b[FE0">
+                        <value name="NAME">
+                          <shadow type="textinline" id="p%XHsGgQ?%^UcrcL.v6B">
+                            <field name="text">ProductTable</field>
+                          </shadow>
+                        </value>
+                        <statement name="DO">
+                          <block type="field" id="6]T;RVAY:tb]o2}nza$j">
+                            <value name="NAME">
+                              <shadow type="textinline" id="}h)))d+H6WxcgD]qETr3">
+                                <field name="text">ProductID</field>
+                              </shadow>
+                            </value>
+                            <value name="VALUE">
+                              <shadow type="textinline" id="!S0O{L`Ox.y1Xi)*=Q$o">
+                                <field name="text">{{ PRODUCT_ID }}</field>
+                              </shadow>
+                            </value>
+                            <next>
+                              <block type="field" id="mHQ]b3}WQgAfK5eiZ2Ki">
+                                <value name="NAME">
+                                  <shadow type="textinline" id="QR.EycF`?6$Fz[FA`NOU">
+                                    <field name="text">ProductDescription</field>
+                                  </shadow>
+                                </value>
+                                <value name="VALUE">
+                                  <shadow type="textinline" id="DL)eG#WyxyN0ucj?21RG">
+                                    <field name="text">{{ PRODUCT_DESC }}</field>
+                                  </shadow>
+                                </value>
+                                <next>
+                                  <block type="field" id=".aD:-YO#nqY9nh2Hlc[k">
+                                    <value name="NAME">
+                                      <shadow type="textinline" id="TWpz-E=:.XU!o~S%dG5m">
+                                        <field name="text">Malu10</field>
+                                      </shadow>
+                                    </value>
+                                    <value name="VALUE">
+                                      <shadow type="textinline" id="j-Ab)G~YFlO|Eg~qJ1+I">
+                                        <field name="text">{{ MALU_10 }}</field>
+                                      </shadow>
+                                    </value>
+                                    <next>
+                                      <block type="field" id="M8Aplv483r:mKb#QSD+k">
+                                        <value name="NAME">
+                                          <shadow type="textinline" id="RhJJvOApRDe|F011/*[*">
+                                            <field name="text">ItemQuantity</field>
+                                          </shadow>
+                                        </value>
+                                        <value name="VALUE">
+                                          <shadow type="textinline" id="4eNPi$qy,m%%}AyhzTCy">
+                                            <field name="text">{{ ITEM_QUANTITY if MALU_10 == 1 else 0.0 }}</field>
+                                          </shadow>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

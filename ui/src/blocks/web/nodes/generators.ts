@@ -1,5 +1,11 @@
 export default function define(Python: Blockly.BlockGenerators) {
 
+    Python['generation'] = function (block) {
+        const statements_mapping = Blockly.Python.statementToCode(block, 'DO');
+        const code = `\n<generation>${statements_mapping}\n</generation>`
+        return code;
+    };
+
     Python['mapping'] = function (block) {
         const statements_mapping = Blockly.Python.statementToCode(block, 'DO');
         const code = `\n<mapping>${statements_mapping}\n</mapping>`
@@ -33,6 +39,14 @@ export default function define(Python: Blockly.BlockGenerators) {
         return code;
     };
 
+    Python['element_agg'] = function (block) {
+        const value = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+        const agg = Blockly.Python.valueToCode(block, 'AGG', Blockly.Python.ORDER_ATOMIC);
+        const statements_name = Blockly.Python.statementToCode(block, 'DO');
+        const code = `\n<element name="${value}" agg="${agg}">${statements_name}\n</element>`
+        return code;
+    };
+
     Python['list'] = function (block) {
         const value = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
         const statements_name = Blockly.Python.statementToCode(block, 'DO');
@@ -49,6 +63,22 @@ export default function define(Python: Blockly.BlockGenerators) {
         const code = `\n<list name="${value}" group="${group}">${statements_name}\n</list>`
         return code;
     };
+
+    Python['list_manual'] = function (block) {
+        const value = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+        const statements_name = Blockly.Python.statementToCode(block, 'DO');
+        // TODO: Assemble JavaScript into code variable.
+        const code = `\n<list name="${value}" manual="true">${statements_name}\n</list>`
+        return code;
+    };
+
+    Python['row'] = function (block) {
+        const value = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+        const statements_name = Blockly.Python.statementToCode(block, 'DO');
+        const code = `\n<row name="${value}">${statements_name}\n</row>`
+        return code;
+    };
+
 
     Python['field'] = function (block) {
         const name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);

@@ -2,6 +2,8 @@
 
     <label text="Nodes" web-class="myLabelStyle"></label>
 
+    <block type="generation"></block>
+
     <block type="mapping"></block>
     <block type="source"></block>
     <block type="output"></block>
@@ -26,6 +28,19 @@
             </shadow>
         </value>
     </block>
+    <block type="element_agg">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+        <value name="AGG">
+            <shadow type="textinline">
+                <field name="text">aggregation</field>
+            </shadow>
+        </value>
+    </block>
+
     <block type="list">
         <value name="NAME">
             <shadow type="textinline">
@@ -45,6 +60,24 @@
             </shadow>
         </value>
     </block>
+
+    <block type="list_manual">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">name</field>
+            </shadow>
+        </value>
+    </block>
+
+    <block type="row">
+        <value name="NAME">
+            <shadow type="textinline">
+                <field name="text">1</field>
+            </shadow>
+        </value>
+    </block>
+
+
     <block type="field">
         <value name="NAME">
             <shadow type="textinline">
