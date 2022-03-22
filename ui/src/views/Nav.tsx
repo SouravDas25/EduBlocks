@@ -47,9 +47,8 @@ export default class Nav extends Component<Props, {}> {
             <nav>
                 <a class='brand' onClick={() => this.props.modeQuestion()} data-tooltip='Change Mode'>
                     {this.props.platformImg && <img src={this.props.platformImg} class='Nav__platformImg' height={50}/>}
-                    <img class='logo' src='https://i.ibb.co/2Zp0pyw/weblogo.png'/>
                 </a>
-                <Auth openAuth={this.props.openAuth} closeAuth={this.props.closeAuth}/>
+                {/*<Auth openAuth={this.props.openAuth} closeAuth={this.props.closeAuth}/>*/}
                 <input id="filename" class='brand' placeholder={navLabels[7]}
                        style='width: 200px; color:black; margin-left: 5px; float:right;'
                        onChange={(e) => this.props.onFileChange((e.target as any).value)}/>
