@@ -95,7 +95,7 @@ export default class TrinketView extends Component<Props, {}> {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:5000/process", requestOptions)
+        fetch("https://dt-backend-chatty-dog-nt.cfapps.ap21.hana.ondemand.com/process", requestOptions)
             .then(response => response.text())
             .then(result => this.setCode(result))
             .catch(error => console.log('error', error));

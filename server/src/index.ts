@@ -22,12 +22,11 @@ if (!fs.existsSync(eduBlocksWorkingPath)) {
 
 const ui = path.join(__dirname, '..', '..', 'ui');
 const scriptPath = path.join(eduBlocksWorkingPath, 'output.py');
-const packagePath = path.join(__dirname, '..', 'package.json');
 
 const beforeScriptPath = path.join(__dirname, '..', '..', 'script-includes', 'before.py');
 const afterScriptPath = path.join(__dirname, '..', '..', 'script-includes', 'after.py');
 
-const version = JSON.parse(fs.readFileSync(packagePath, 'utf8')).version;
+const version = "1.0.0";
 
 console.log(`Version: ${version}`);
 console.log(`Scripts will be written to: ${scriptPath}`);
@@ -159,11 +158,11 @@ app.get('/', (req, res, next) => {
 });
 
 app.use(bodyParser.text());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(ui));
 
-app.post('/file-upload', function(req, res) {
+app.post('/file-upload', function (req, res) {
     const body = req.body
     const name = req.query["file-name"];
     const target_path = './public/files/' + name;
@@ -175,7 +174,8 @@ const uploads = path.join(__dirname, '..', 'public');
 
 app.use(express.static(uploads));
 
-app.listen(8081, () => {
+const port = process.env.PORT || 8081;
+app.listen(port, () => {
     console.log('EduBlocks Connect now listening on port 8081!')
     console.log('Launch http://app.edublocks.org/editor and select the "Raspberry Pi" mode to get started!')
 });

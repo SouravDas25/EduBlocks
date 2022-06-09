@@ -1,0 +1,7 @@
+
+applications:
+  - name: dt-ui
+    path: .
+    buildpacks:
+      - nodejs_buildpack
+    memory: 128M

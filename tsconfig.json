@@ -1,0 +1,22 @@
+{
+  "version": "2.3.2",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "target": "es5",
+    "strict": true,
+    "noUnusedLocals": true,
+    "sourceMap": false,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "jsx": "react"
+  },
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts"
+  ],
+  "assets":["ui/**/*.xml", ]
+
+}

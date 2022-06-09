@@ -114,12 +114,12 @@ export class CortexM extends ADI implements Processor {
     public resume(wait: boolean = true, timeout: number = 0) {
         return this.isHalted()
             .then((halted) => {
-                if (!halted) return Promise.resolve<void>();
+                if (!halted) return Promise.resolve<void>(undefined);
 
                 return this.writeMem32(DebugRegister.DFSR, DfsrMask.DWTTRAP | DfsrMask.BKPT | DfsrMask.HALTED)
                     .then(() => this.enableDebug())
                     .then(() => {
-                        if (!wait) return Promise.resolve<void>();
+                        if (!wait) return Promise.resolve<void>(undefined);
 
                         return this.waitDelay(() => this.isHalted().then((result) => !result), 100, timeout);
                     });

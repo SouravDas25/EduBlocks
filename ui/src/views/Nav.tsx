@@ -1,6 +1,5 @@
 import React = require('preact');
 import {Component} from 'preact';
-import Auth from './Auth';
 import {GlobalVars, navLabels} from './Page';
 
 interface Props {
