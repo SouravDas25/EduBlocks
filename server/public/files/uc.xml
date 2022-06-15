@@ -1,0 +1,232 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+    <block type="generation" id=",ltYgsoT,[Kv^!o-JNjk" x="524" y="178">
+        <statement name="DO">
+            <block type="mapping" id="YU6Q5?lypx`}~hnWmt(D">
+                <statement name="DO">
+                    <block type="source" id="vd~Rzblp*Mv6]Oi-{d2~">
+                        <statement name="DO">
+                            <block type="csv" id=")@PzI87sV2hFWj6~rZQw">
+                                <value name="NAME">
+                                    <shadow type="textinline" id="(`aDV!$h?|EeDNNKVI~;">
+                                        <field name="text">DS1</field>
+                                    </shadow>
+                                </value>
+                                <value name="VALUE">
+                                    <shadow type="textinline" id="U7y}7Qk.ct_th,v}@iNa">
+                                        <field name="text">uc/data.csv</field>
+                                    </shadow>
+                                </value>
+                            </block>
+                        </statement>
+                        <next>
+                            <block type="output" id="X0,lZV_s-:G`Wi3lv[/O">
+                                <statement name="DO">
+                                    <block type="element" id="=n4K$2e-bqBL5kQ^UOwo">
+                                        <value name="NAME">
+                                            <shadow type="textinline" id="7=;PdSNn,jCmhPat!O^{">
+                                                <field name="text">Tax Calculation</field>
+                                            </shadow>
+                                        </value>
+                                        <statement name="DO">
+                                            <block type="field" id="Xfl[nf:-2E[lbTg#3xaF">
+                                                <value name="NAME">
+                                                    <shadow type="textinline" id="SP,41%u5W*w`3;CW-z09">
+                                                        <field name="text">Company Name</field>
+                                                    </shadow>
+                                                </value>
+                                                <value name="VALUE">
+                                                    <shadow type="textinline" id="lgvP(P*rs^Zm^!LY96jL">
+                                                        <field name="text">ABC Company</field>
+                                                    </shadow>
+                                                </value>
+                                                <next>
+                                                    <block type="field_agg" id="F{{/0jy.ge#Wqg0Ptp;W">
+                                                        <value name="NAME">
+                                                            <shadow type="textinline" id="SL8;{cY9gi|aKTAgA0HP">
+                                                                <field name="text">Total Tax Amount</field>
+                                                            </shadow>
+                                                        </value>
+                                                        <value name="VALUE">
+                                                            <shadow type="textinline" id="iBtrJrP$:uGVbQeW)RH4">
+                                                                <field name="text">{{ TaxRate / 100 * UnitPrice }}</field>
+                                                            </shadow>
+                                                        </value>
+                                                        <value name="AGG">
+                                                            <shadow type="textinline" id="LHi*~Gz@K)edUxhu-kZ.">
+                                                                <field name="text">sum</field>
+                                                            </shadow>
+                                                        </value>
+                                                        <next>
+                                                            <block type="list_group" id=",L#RfTo?S]=[[E^]fj$#">
+                                                                <value name="NAME">
+                                                                    <shadow type="textinline" id=";Ru3EVNIislg_pNU|E!}">
+                                                                        <field name="text">Categories</field>
+                                                                    </shadow>
+                                                                </value>
+                                                                <value name="GROUP">
+                                                                    <shadow type="textinline" id="wVrE%k|llUiwkwq2~0^@">
+                                                                        <field name="text">{{ Cat }}</field>
+                                                                    </shadow>
+                                                                </value>
+                                                                <statement name="DO">
+                                                                    <block type="field" id="Z@5_L[*-)[BcZ+v9{]q+">
+                                                                        <value name="NAME">
+                                                                            <shadow type="textinline" id="a^+TD0U{VnCKx-Kr!{]Y">
+                                                                                <field name="text">Categories</field>
+                                                                            </shadow>
+                                                                        </value>
+                                                                        <value name="VALUE">
+                                                                            <shadow type="textinline" id="m4bUSN]1KI/2rJ~MYYVt">
+                                                                                <field name="text">{{ Cat }}</field>
+                                                                            </shadow>
+                                                                        </value>
+                                                                        <next>
+                                                                            <block type="field_agg" id="!=TL5x@[hgxC3A=9^QJI">
+                                                                                <value name="NAME">
+                                                                                    <shadow type="textinline" id="=?!o[oqYgN]`2AsNt%IB">
+                                                                                        <field name="text">Amount</field>
+                                                                                    </shadow>
+                                                                                </value>
+                                                                                <value name="VALUE">
+                                                                                    <shadow type="textinline" id="r`u[d6c}g/RIDQBQ4p%%">
+                                                                                        <field name="text">{{ UnitPrice }}</field>
+                                                                                    </shadow>
+                                                                                </value>
+                                                                                <value name="AGG">
+                                                                                    <shadow type="textinline" id="hnjYaX5E!,^074r[odv,">
+                                                                                        <field name="text">sum</field>
+                                                                                    </shadow>
+                                                                                </value>
+                                                                                <next>
+                                                                                    <block type="field" id="YY-5m$!_Yw[u?fY9B=*?">
+                                                                                        <value name="NAME">
+                                                                                            <shadow type="textinline" id="wVb`}H97TA(=R$?+$4fr">
+                                                                                                <field name="text">Tax Rate</field>
+                                                                                            </shadow>
+                                                                                        </value>
+                                                                                        <value name="VALUE">
+                                                                                            <shadow type="textinline" id="[3/UN@h{u9Zj[CsKipD/">
+                                                                                                <field name="text">{{ TaxRate }}</field>
+                                                                                            </shadow>
+                                                                                        </value>
+                                                                                        <next>
+                                                                                            <block type="field_agg" id="l@U?w,{.gOtlFD3]Zf!j">
+                                                                                                <value name="NAME">
+                                                                                                    <shadow type="textinline" id="Mq8wF~L$V,tX6lf.aASH">
+                                                                                                        <field name="text">Tax Amount</field>
+                                                                                                    </shadow>
+                                                                                                </value>
+                                                                                                <value name="VALUE">
+                                                                                                    <shadow type="textinline" id="wyqKy?BX@j2c/89ffrS8">
+                                                                                                        <field name="text">{{ TaxRate / 100 * UnitPrice }}</field>
+                                                                                                    </shadow>
+                                                                                                </value>
+                                                                                                <value name="AGG">
+                                                                                                    <shadow type="textinline" id="cFaH-wP+AiM*8$LJ9z8S">
+                                                                                                        <field name="text">sum</field>
+                                                                                                    </shadow>
+                                                                                                </value>
+                                                                                                <next>
+                                                                                                    <block type="list_group" id="?o,mwBFfe%`uhj0pMr%*">
+                                                                                                        <value name="NAME">
+                                                                                                            <shadow type="textinline" id="6p[wWxeEak/8p}$7U_.f">
+                                                                                                                <field name="text">Sub Categories</field>
+                                                                                                            </shadow>
+                                                                                                        </value>
+                                                                                                        <value name="GROUP">
+                                                                                                            <shadow type="textinline" id="xyzRC?;=G+f|(.A@Y;Ci">
+                                                                                                                <field name="text">{{ SubCat }}</field>
+                                                                                                            </shadow>
+                                                                                                        </value>
+                                                                                                        <statement name="DO">
+                                                                                                            <block type="field" id="O9vO_v;jQ07-N]#w%9av">
+                                                                                                                <value name="NAME">
+                                                                                                                    <shadow type="textinline" id="a@^-nIWS+Wfp5lg@*-M2">
+                                                                                                                        <field name="text">Categories</field>
+                                                                                                                    </shadow>
+                                                                                                                </value>
+                                                                                                                <value name="VALUE">
+                                                                                                                    <shadow type="textinline" id="5Im6-bA|q?2Aw.hJt15Y">
+                                                                                                                        <field name="text">{{ SubCat }}</field>
+                                                                                                                    </shadow>
+                                                                                                                </value>
+                                                                                                                <next>
+                                                                                                                    <block type="field_agg" id="Y5(5K0nGnG0V89yr48MJ">
+                                                                                                                        <value name="NAME">
+                                                                                                                            <shadow type="textinline" id="G=fhan)+ZE)2+!6y*w`.">
+                                                                                                                                <field name="text">Amount</field>
+                                                                                                                            </shadow>
+                                                                                                                        </value>
+                                                                                                                        <value name="VALUE">
+                                                                                                                            <shadow type="textinline" id="l8Pnr8/+9)|y_.KGUZmv">
+                                                                                                                                <field name="text">{{ UnitPrice }}</field>
+                                                                                                                            </shadow>
+                                                                                                                        </value>
+                                                                                                                        <value name="AGG">
+                                                                                                                            <shadow type="textinline" id="g=,55B]/Gmu*iaF+4LVq">
+                                                                                                                                <field name="text">sum</field>
+                                                                                                                            </shadow>
+                                                                                                                        </value>
+                                                                                                                        <next>
+                                                                                                                            <block type="field" id="TNy.SfzOlR[oHbdn:kR!">
+                                                                                                                                <value name="NAME">
+                                                                                                                                    <shadow type="textinline" id=")j}q,{X9KbBU4#tg57*F">
+                                                                                                                                        <field name="text">Tax Rate</field>
+                                                                                                                                    </shadow>
+                                                                                                                                </value>
+                                                                                                                                <value name="VALUE">
+                                                                                                                                    <shadow type="textinline" id="BCuIc_w;C8R;D0OA$R_h">
+                                                                                                                                        <field name="text">{{ TaxRate }}</field>
+                                                                                                                                    </shadow>
+                                                                                                                                </value>
+                                                                                                                                <next>
+                                                                                                                                    <block type="field_agg" id="l++Y#QDcxq%5y0A@i-J~">
+                                                                                                                                        <value name="NAME">
+                                                                                                                                            <shadow type="textinline" id="THa*8nO9u|BsyZ;Z|VSw">
+                                                                                                                                                <field name="text">Tax Amount</field>
+                                                                                                                                            </shadow>
+                                                                                                                                        </value>
+                                                                                                                                        <value name="VALUE">
+                                                                                                                                            <shadow type="textinline" id="+5IiUbs$q@urGDGno7gE">
+                                                                                                                                                <field name="text">{{ TaxRate / 100 * UnitPrice }}</field>
+                                                                                                                                            </shadow>
+                                                                                                                                        </value>
+                                                                                                                                        <value name="AGG">
+                                                                                                                                            <shadow type="textinline" id="@[THzDHz1ITDyK(qhMne">
+                                                                                                                                                <field name="text">sum</field>
+                                                                                                                                            </shadow>
+                                                                                                                                        </value>
+                                                                                                                                    </block>
+                                                                                                                                </next>
+                                                                                                                            </block>
+                                                                                                                        </next>
+                                                                                                                    </block>
+                                                                                                                </next>
+                                                                                                            </block>
+                                                                                                        </statement>
+                                                                                                    </block>
+                                                                                                </next>
+                                                                                            </block>
+                                                                                        </next>
+                                                                                    </block>
+                                                                                </next>
+                                                                            </block>
+                                                                        </next>
+                                                                    </block>
+                                                                </statement>
+                                                            </block>
+                                                        </next>
+                                                    </block>
+                                                </next>
+                                            </block>
+                                        </statement>
+                                    </block>
+                                </statement>
+                            </block>
+                        </next>
+                    </block>
+                </statement>
+            </block>
+        </statement>
+    </block>
+</xml>
