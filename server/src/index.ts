@@ -165,8 +165,11 @@ app.use(express.static(ui));
 app.post('/file-upload', function (req, res) {
     const body = req.body
     const name = req.query["file-name"];
-    const target_path = './public/files/' + name;
-    fs.writeFileSync(target_path, body, "UTF-8");
+    if (name != null) {
+        // @ts-ignore
+        const target_path = path.join(__dirname, '..', 'public', 'files', name);
+        fs.writeFileSync(target_path, body, "UTF-8");
+    }
     res.send(name + " File Saved.")
 });
 
